@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.8.15-alpine
+FROM python:3.12.3-alpine
 
 RUN apk update && apk add python3-dev gcc libc-dev
 
