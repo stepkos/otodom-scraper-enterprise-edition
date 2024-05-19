@@ -16,7 +16,8 @@ services:
             dockerfile: ./docker/backend/Dockerfile
         entrypoint: /app/docker/backend/server-entrypoint.sh
         volumes:
-            - static_volume:/app/backend/django_static
+#            - static_volume:/app/backend/django_static
+            - ./backend:/app/backend
         expose:
             - 8000     
         environment:
@@ -36,7 +37,8 @@ services:
             dockerfile: ./docker/backend/Dockerfile
         entrypoint: /app/docker/backend/worker-entrypoint.sh
         volumes:
-            - static_volume:/app/backend/django_static
+#            - static_volume:/app/backend/django_static
+            - ./backend:/app/backend
         environment:
             DEBUG: "True"
             CELERY_BROKER_URL: "redis://redis:6379/0"
