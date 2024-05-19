@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     # Modules
     "modules.assignments",
+    "modules.apartments",
 ]
 
 MIDDLEWARE = [
