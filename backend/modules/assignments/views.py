@@ -3,9 +3,9 @@ from django.db import transaction
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 
-from assignments.models import Assignment
-from assignments.serializers import AssignmentSerializer
-from assignments.tasks import task_execute
+from modules.assignments.models import Assignment
+from modules.assignments.serializers import AssignmentSerializer
+from modules.assignments.tasks import task_execute
 
 
 class AssignmentViewSet(viewsets.ModelViewSet):
