@@ -1,7 +1,6 @@
 from django.urls import re_path
-from rest_framework.routers import DefaultRouter
-
 from modules.assignments.views import AssignmentViewSet
+from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r"assignments", AssignmentViewSet, basename="assignments")

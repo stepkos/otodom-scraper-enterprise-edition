@@ -1,5 +1,4 @@
 from celery import shared_task
-
 from modules.assignments.models import Assignment
 
 

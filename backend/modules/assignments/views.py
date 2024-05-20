@@ -1,11 +1,9 @@
 from django.db import transaction
-
-from rest_framework import viewsets
-from rest_framework.exceptions import APIException
-
 from modules.assignments.models import Assignment
 from modules.assignments.serializers import AssignmentSerializer
 from modules.assignments.tasks import task_execute
+from rest_framework import viewsets
+from rest_framework.exceptions import APIException
 
 
 class AssignmentViewSet(viewsets.ModelViewSet):
@@ -28,4 +26,3 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 
         except Exception as e:
             raise APIException(str(e))
-
