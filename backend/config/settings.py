@@ -48,8 +48,9 @@ INSTALLED_APPS = [
     # Installed apps
     "rest_framework",
     # Modules
-    "modules.assignments",
     "modules.apartments",
+    "modules.core",
+    "modules.scraper",
 ]
 
 MIDDLEWARE = [
