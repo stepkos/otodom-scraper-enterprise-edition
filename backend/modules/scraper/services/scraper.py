@@ -40,17 +40,13 @@ def spec_list_apartments_iterator(page: html.HtmlElement):
 
 
 def apartments_iterator(base_url: URL) -> Iterator:
-    def __get_apartments_tree(page) -> html.HtmlElement:
+    for page in pages_iterator(base_url):
         if page is None:
             raise ValueError("Failed to fetch page")
         tree = html.fromstring(page)
         if tree.xpath(XPATHS["offers-not-found"]):
-            raise StopIteration
-        return tree
-
-    for curr_page in pages_iterator(base_url):
-        curr_tree = __get_apartments_tree(curr_page)
-        yield from spec_list_apartments_iterator(curr_tree)
+            return
+        yield from spec_list_apartments_iterator(tree)
 
 
 class ScraperService:
