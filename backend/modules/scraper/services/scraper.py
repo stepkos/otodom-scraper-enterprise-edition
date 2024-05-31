@@ -1,11 +1,10 @@
-from itertools import count
 from typing import Iterator
 
 from yarl import URL
 from lxml import html
 
 from modules.scraper.services.parsing_rules import FIELD_MAP
-# from modules.apartments.models import Apartment
+from modules.apartments.models import Apartment
 from modules.scraper.utils import pages_iterator
 
 XPATHS = {
@@ -29,24 +28,15 @@ def spec_list_apartments_iterator(page: html.HtmlElement):
                 return FIELD_MAP[attr_name].process_value(text[0])
             return None
 
-        # yield Apartment(
-        #     price=parse_single_attr("price"),
-        #     title=parse_single_attr("title"),
-        #     subpage=parse_single_attr("subpage"),
-        #     rooms=parse_single_attr("rooms"),
-        #     area=parse_single_attr("area"),
-        #     floor=parse_single_attr("floor"),
-        #     address=parse_single_attr("address"),
-        # )
-        yield [
-            parse_single_attr("price"),
-            parse_single_attr("title"),
-            parse_single_attr("subpage"),
-            parse_single_attr("rooms"),
-            parse_single_attr("area"),
-            parse_single_attr("floor"),
-            parse_single_attr("address"),
-        ]
+        yield Apartment(
+            price=parse_single_attr("price"),
+            title=parse_single_attr("title"),
+            subpage=parse_single_attr("subpage"),
+            rooms=parse_single_attr("rooms"),
+            area=parse_single_attr("area"),
+            floor=parse_single_attr("floor"),
+            address=parse_single_attr("address"),
+        )
 
 
 def apartments_iterator(base_url: URL) -> Iterator:
@@ -66,11 +56,3 @@ def apartments_iterator(base_url: URL) -> Iterator:
 class ScraperService:
     def __init__(self, url: str):
         self.url = URL(url)
-
-
-if __name__ == "__main__":
-    turl = URL(
-        "https://www.otodom.pl/pl/wyniki/sprzedaz/mieszkanie/dolnoslaskie?limit=36&ownerTypeSingleSelect=ALL&priceMin=123&priceMax=100000&by=DEFAULT&direction=DESC&viewType=listing"
-    )
-    for x in apartments_iterator(turl):
-        print(x)
