@@ -1,6 +1,7 @@
-import requests
 from yarl import URL
 from lxml import html
+
+from modules.scraper.utils import pages_iterator
 
 
 class ListViewApartmentsIterator:
@@ -30,7 +31,6 @@ class ListViewApartmentsIterator:
 
     # def __next__(self):
     #     ...
-
 
 
 class Scraper:

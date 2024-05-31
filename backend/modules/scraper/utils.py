@@ -1,3 +1,5 @@
+from typing import Iterator
+
 import requests
 from yarl import URL
 
