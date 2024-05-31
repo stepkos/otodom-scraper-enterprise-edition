@@ -21,20 +21,8 @@ XPATHS = {
 }
 
 
-class SpecListApartmentsIterator:
-
-    def __init__(self, page: html.HtmlElement):
-        self.page = page
-        self.apartments_iter = iter(page.xpath(XPATHS["offers"]))
-
-    def __next__(self):
-        html_article = next(self.apartments_iter)
-        return self.parser(html_article)
-
-    def __iter__(self):
-        return self
-
-    def parser(self, html_article: html.HtmlElement):
+def spec_list_apartments_iterator(page: html.HtmlElement):
+    for html_article in iter(page.xpath(XPATHS["offers"])):
         def parse_single_attr(attr_name: str):
             text = html_article.xpath(XPATHS[attr_name])
             if text:
@@ -50,7 +38,7 @@ class SpecListApartmentsIterator:
         #     floor=parse_single_attr("floor"),
         #     address=parse_single_attr("address"),
         # )
-        return [
+        yield [
             parse_single_attr("price"),
             parse_single_attr("title"),
             parse_single_attr("subpage"),
@@ -72,7 +60,7 @@ def apartments_iterator(base_url: URL) -> Iterator:
 
     for curr_page in pages_iterator(base_url):
         curr_tree = __get_apartments_tree(curr_page)
-        yield from SpecListApartmentsIterator(curr_tree)
+        yield from spec_list_apartments_iterator(curr_tree)
 
 
 class ScraperService:
