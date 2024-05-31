@@ -1,3 +1,6 @@
+from itertools import count
+from typing import Iterator
+
 from yarl import URL
 from lxml import html
 
@@ -5,6 +8,17 @@ from modules.scraper.services.parsing_rules import FIELD_MAP
 # from modules.apartments.models import Apartment
 from modules.scraper.utils import pages_iterator
 
+XPATHS = {
+    "offers-not-found": "//div[@data-cy='no-search-results']",
+    "offers": "//div[@data-cy='search.listing.organic' or @data-cy='search.listing.promoted']/ul/li/article",
+    "price": ".//div[@data-testid='listing-item-header']/span",
+    "title": ".//a[@data-cy='listing-item-link']/p",
+    "subpage": ".//a[@data-cy='listing-item-link']",
+    "rooms": ".//dt[text()='Liczba pokoi']/following-sibling::dd",
+    "area": ".//dt[text()='Powierzchnia']/following-sibling::dd",
+    "floor": ".//dt[text()='Piętro']/following-sibling::dd",
+    "address": ".//p[@data-testid='advert-card-address']",
+}
 
 
 class SpecListApartmentsIterator:
@@ -61,9 +75,9 @@ def apartments_iterator(base_url: URL) -> Iterator:
         yield from SpecListApartmentsIterator(curr_tree)
 
 
-class Scraper:
-    def __init__(self, url: URL):
-        self.url = url
+class ScraperService:
+    def __init__(self, url: str):
+        self.url = URL(url)
 
 
 if __name__ == "__main__":
