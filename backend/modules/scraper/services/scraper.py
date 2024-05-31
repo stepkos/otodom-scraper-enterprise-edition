@@ -29,7 +29,7 @@ def spec_list_apartments_iterator(page: html.HtmlElement):
                 return FIELD_MAP[attr_name].process_value(text[0])
             return None
 
-        # return Apartment(
+        # yield Apartment(
         #     price=parse_single_attr("price"),
         #     title=parse_single_attr("title"),
         #     subpage=parse_single_attr("subpage"),
