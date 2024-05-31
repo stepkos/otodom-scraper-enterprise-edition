@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, Callable
 
+from lxml.html import HtmlElement
+
 A = TypeVar("A")
 T = TypeVar("T")
 
@@ -32,6 +34,17 @@ class Caster(ValueProcessor[A, T]):
         return self.func(raw_value)
 
 
+class TryCaster(Caster[A, T]):
+    def __init__(self, func: Callable[[A], T]):
+        super().__init__(func)
+
+    def process_value(self, raw_value: A) -> T | None:
+        try:
+            return self.func(raw_value)
+        except ValueError:
+            return None
+
+
 class Multi(ValueProcessor[A, T]):
     def __init__(self, processors: list[ValueProcessor] = ()):
         self.processors = processors
@@ -39,16 +52,8 @@ class Multi(ValueProcessor[A, T]):
     def process_value(self, raw_value: A) -> T:
         result = raw_value
         for processor in self.processors:
-            result = processor.process_value(processor)
+            result = processor.process_value(result)
         return result
-
-
-class AttrGet(ValueProcessor[A, T]):
-    def __init__(self, attr_name: str):
-        self.attr_name = attr_name
-
-    def process_value(self, raw_value: A) -> T:
-        return getattr(raw_value, self.attr_name)
 
 
 class KeyGet(ValueProcessor[A, T]):
@@ -74,40 +79,15 @@ class SpecialCases(ValueProcessor[A, T]):
         self.default_processor = default_processor
 
     def process_value(self, raw_value: A) -> T | None:
-        try_get = self.map_dict.get(raw_value, None)
-        if try_get:
+        try_get = self.map_dict.get(raw_value.strip(), None)
+        if try_get is not None:
             return try_get
         return self.default_processor.process_value(raw_value)
 
 
-class SplitFirstIntCast(Multi[str, int]):
-    def __init__(self):
-        super().__init__([
-            SplitAndFirst(), Caster(int)
-        ])
+class ExtractText(ValueProcessor[HtmlElement, str]):
+    def process_value(self, raw_value: HtmlElement) -> str:
+        return raw_value.text_content()
 
 
 ProcessorDict = dict[str, ValueProcessor]
-
-FIELD_MAP: ProcessorDict = {
-    'price': Multi[str, str]([AttrGet("text"), Replace('\xa0', ''), Stripper("zł")]),
-    'title': AttrGet("text"),
-    'subpage': KeyGet("href"),
-    'rooms': SpecialCases[str, int](
-        {
-            "10+": 11,
-        },
-        SplitFirstIntCast()
-    ),
-    'area': Multi[str, float]([Stripper(' m²'), Caster(float)]),
-    'floor': SpecialCases[str, int](
-        {
-            "parter": 0,
-            "10+": 11,
-            "poddasze": 12,
-            "suterena": 13,
-        },
-        SplitFirstIntCast()
-    ),
-    'address': Multi(),
-}
