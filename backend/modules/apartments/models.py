@@ -8,15 +8,15 @@ from modules.core.models import BaseModel
 
 class Apartment(BaseModel):
     title = models.CharField(verbose_name=_("Title"), max_length=255)
-    address = models.CharField(verbose_name=_("Address"), max_length=255)
+    address = models.CharField(verbose_name=_("Address"), max_length=255, blank=True, null=True)
     price = models.DecimalField(
         verbose_name=_("Price"), max_digits=10, decimal_places=0, blank=True, null=True
     )
     subpage = models.URLField(verbose_name=_("Subpage"), unique=True, editable=False)
-    rooms = models.PositiveSmallIntegerField(verbose_name=_("Rooms"))
-    area = models.DecimalField(verbose_name=_("Area"), max_digits=8, decimal_places=2)
+    rooms = models.PositiveSmallIntegerField(verbose_name=_("Rooms"), blank=True, null=True)
+    area = models.DecimalField(verbose_name=_("Area"), max_digits=8, decimal_places=2, blank=True, null=True)
     floor = models.CharField(
-        verbose_name=_("Floor"), max_length=20, choices=FloorChoice.choices
+        verbose_name=_("Floor"), max_length=20, choices=FloorChoice.choices, blank=True, null=True
     )
 
     class Meta:
@@ -34,7 +34,9 @@ class Apartment(BaseModel):
 
 
 class ApartmentDetails(BaseModel):
-    apartment = models.OneToOneField(Apartment, verbose_name=_("Apartment"), related_name="details", on_delete=models.SET_NULL)
+    apartment = models.OneToOneField(
+        Apartment, verbose_name=_("Apartment"), related_name="details", on_delete=models.SET_NULL, blank=True, null=True
+    )
     max_floor = models.PositiveSmallIntegerField(verbose_name=_("Max Floor"), blank=True, null=True)
     rent = models.PositiveSmallIntegerField(verbose_name=_("Rent"), blank=True, null=True)
     energy_certificate = models.CharField(verbose_name=_("Energy Certificate"), max_length=4, blank=True, null=True)
