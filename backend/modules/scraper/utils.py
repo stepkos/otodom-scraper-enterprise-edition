@@ -12,11 +12,11 @@ def url_paginator(
     i = start
     if end is not None:
         while i <= end:
-            yield url.with_query({param_name: i})
+            yield url.update_query({param_name: i})
             i += 1
     else:
         while True:
-            yield url.with_query({param_name: i})
+            yield url.update_query({param_name: i})
             i += 1
 
 
