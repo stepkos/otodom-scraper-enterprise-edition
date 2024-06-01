@@ -21,9 +21,16 @@ class Stripper(ValueProcessor[str, str]):
         return raw_value.strip(self.keyword)
 
 
-class SplitAndFirst(ValueProcessor[str, str]):
-    def process_value(self, raw_value: str) -> str:
-        return raw_value.split(' ')[0]
+class SplitAndTake(ValueProcessor[str, str]):
+    def __init__(self, by: str = " ", take: int = 0):
+        self.by = by
+        self.take = take
+
+    def process_value(self, raw_value: str) -> str | None:
+        splitted = raw_value.split(self.by)
+        if self.take >= len(splitted):
+            return None
+        return splitted[self.take]
 
 
 class Caster(ValueProcessor[A, T]):
@@ -41,7 +48,7 @@ class TryCaster(Caster[A, T]):
     def process_value(self, raw_value: A) -> T | None:
         try:
             return self.func(raw_value)
-        except ValueError:
+        except (ValueError, TypeError):
             return None
 
 
