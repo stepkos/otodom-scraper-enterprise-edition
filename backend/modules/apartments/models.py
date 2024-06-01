@@ -13,11 +13,16 @@ class Apartment(BaseModel):
         verbose_name=_("Price"), max_digits=10, decimal_places=0, blank=True, null=True
     )
     subpage = models.URLField(verbose_name=_("Subpage"), unique=True, editable=False)
-    rooms = models.PositiveSmallIntegerField(verbose_name=_("Rooms"), blank=True, null=True)
+    rooms = models.PositiveSmallIntegerField(
+        verbose_name=_("Rooms"), blank=True, null=True
+    )  # 11 means 10+
     area = models.DecimalField(verbose_name=_("Area"), max_digits=8, decimal_places=2, blank=True, null=True)
     floor = models.CharField(
         verbose_name=_("Floor"), max_length=20, choices=FloorChoice.choices, blank=True, null=True
     )
+
+    # tmp
+    was_deleted = models.BooleanField(verbose_name=_("Was Deleted"), default=False)
 
     class Meta:
         verbose_name = _("Apartment")

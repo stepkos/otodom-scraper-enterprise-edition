@@ -80,7 +80,7 @@ def details_scraper(page: html.HtmlElement):
 # niektore ogloszenia moga byc juz usuniete (410) bysmy zaznaczyli ze juz nie oczekije
 # moze jakis status (waiting for details, completed, deleted, waiting for update)
 def main():
-    apartments_without_details = Apartment.objects.filter(details__isnull=True)
+    apartments_without_details = Apartment.objects.filter(details__isnull=True, was_deleted=False)
     count = apartments_without_details.count()
     for apartment in apartments_without_details:
         count -= 1
@@ -88,6 +88,8 @@ def main():
         response = requests.get(str(url), headers=HTTP_HEADERS, timeout=10)  # timeotu moze wyrzucic
         if response.status_code == 410:
             print("The offer was deleted. Skipping...")
+            apartment.was_deleted = True
+            apartment.save()
             continue
         elif response.status_code != 200:
             print("Failed to fetch page. Http code:", response.status_code)
