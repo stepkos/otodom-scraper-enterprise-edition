@@ -3,7 +3,7 @@ from typing import Iterator
 import requests
 from yarl import URL
 
-from modules.scraper.constants import HTTP_HEADERS
+from modules.scraper.constants.for_scraper import HTTP_HEADERS
 
 
 def url_paginator(
