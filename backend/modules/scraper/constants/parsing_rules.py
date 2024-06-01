@@ -55,7 +55,7 @@ SUBPAGES_FIELD_MAP: ProcessorDict = {
     'rent': Multi[HtmlElement, str]([
         ExtractText(),
         SplitAndTake(),
-        Caster(int),
+        TryCaster(int),
     ]),
     "energy_certificate": ExtractText(),
     "form_of_the_property": ExtractText(),
@@ -64,7 +64,10 @@ SUBPAGES_FIELD_MAP: ProcessorDict = {
     "parking_place": ExtractText(),
     "heating": ExtractText(),
     "description": ExtractText(),
-    "market": ExtractText(),
+    "market": Multi[HtmlElement, str]([  # losowy css
+        ExtractText(),
+        SplitAndTake("}", -1)
+    ]),
     "advertisement_type": ExtractText(),
     "year_of_construction": ExtractText(),
     "type_of_development": ExtractText(),

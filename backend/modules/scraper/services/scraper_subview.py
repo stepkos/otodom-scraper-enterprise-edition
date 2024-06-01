@@ -3,6 +3,7 @@ from typing import Iterator
 from yarl import URL
 from lxml import html
 
+from modules.apartments.models import Apartment, ApartmentDetails
 from modules.scraper.constants.parsing_rules import SUBPAGES_FIELD_MAP
 from modules.scraper.utils import get_page
 
@@ -38,14 +39,17 @@ def parse_single_attr_for_subview(elem: html.HtmlElement, attr_name: str):
     text = elem.xpath(SUBVIEW_XPATHS[attr_name])
     if text:
         result = SUBPAGES_FIELD_MAP[attr_name].process_value(text[0])
-        if "Zapytaj" not in str(result):
+        print(result, str(result).lower())
+        if "zapytaj" not in str(result).lower() and "brak informacji" not in str(result).lower():
             return result
     return None
 
 
 def details_scraper_iterator(urls: Iterator[URL]):
     for url in urls:
-        return details_scraper(html.fromstring(get_page(url)))
+        page = get_page(url)
+        if page:
+            yield details_scraper(html.fromstring(page))
 
 
 def details_scraper(page: html.HtmlElement):
@@ -69,13 +73,9 @@ def details_scraper(page: html.HtmlElement):
     )
 
 
-if __name__ == "__main__":
-    print(
-        details_scraper_iterator(
-            [
-                URL(
-                    # "https://www.otodom.pl/pl/oferta/centrum-mieszkanie-z-potencjalem-najtaniej-ID4q9KH",
-                    "https://www.otodom.pl/pl/oferta/mieszkanie-do-remontu-62-30-m2-ID4qJWE"
-                ),
-             ])
-    )
+def main():
+    aprts = Apartment.objects.all()
+    urls = (URL("https://www.otodom.pl" + a.subpage) for a in aprts)
+    for result in details_scraper_iterator(urls):
+        print(result)
+        result.save()
