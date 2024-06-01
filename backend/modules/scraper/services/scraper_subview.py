@@ -50,23 +50,23 @@ def details_scraper_iterator(urls: Iterator[URL]):
 
 def details_scraper(page: html.HtmlElement):
     parse = lambda x: parse_single_attr_for_subview(page, x)
-    return [
-        parse("market"),
-        parse("advertisement_type"),
-        parse("year_of_construction"),
-        parse("type_of_development"),
-        parse("windows"),
-        parse("is_elevator"),
-        parse("max_floor"),
-        parse("rent"),
-        parse("energy_certificate"),
-        parse("form_of_the_property"),
-        parse("finishing_condition"),
-        parse("balcony_garden_terrace"),
-        parse("parking_place"),
-        parse("heating"),
-        parse("description"),
-    ]
+    return ApartmentDetails(
+        market=parse("market"),
+        advertisement_type=parse("advertisement_type"),
+        year_of_construction=parse("year_of_construction"),
+        type_of_development=parse("type_of_development"),
+        windows=parse("windows"),
+        is_elevator=parse("is_elevator"),
+        max_floor=parse("max_floor"),
+        rent=parse("rent"),
+        energy_certificate=parse("energy_certificate"),
+        form_of_the_property=parse("form_of_the_property"),
+        finishing_condition=parse("finishing_condition"),
+        balcony_garden_terrace=parse("balcony_garden_terrace"),
+        parking_place=parse("parking_place"),
+        heating=parse("heating"),
+        description=parse("description")
+    )
 
 
 if __name__ == "__main__":
