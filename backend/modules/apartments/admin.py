@@ -1,5 +1,5 @@
 from django.contrib import admin
-from modules.apartments.models import Apartment
+from modules.apartments.models import Apartment, ApartmentDetails
 
 
 @admin.register(Apartment)
@@ -10,3 +10,9 @@ class ApartmentAdmin(admin.ModelAdmin):
     ordering = ("price",)
     readonly_fields = "subpage", "created_at", "updated_at"
     # fields = ...
+
+
+admin.site.register(ApartmentDetails)
+# @admin.register(ApartmentDetails)
+# class ApartmentDetailsAdmin(admin):
+#     list_display =
