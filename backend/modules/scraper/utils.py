@@ -1,4 +1,4 @@
-from typing import Iterator
+from typing import Iterator, Iterable
 
 import requests
 from yarl import URL
@@ -32,6 +32,10 @@ def get_page(url: URL) -> str | None:
 
 def pages_iterator(
     url: URL, param_name: str = 'page', start: int = 1, end: int | None = None
-) -> str | None:
-    for i in url_paginator(url, param_name, start, end):
-        yield get_page(i)
+) -> Iterator[str | None]:
+    for url in url_paginator(url, param_name, start, end):
+        yield get_page(url)
+
+
+def subpages_iterator(urls: Iterable[URL]) -> Iterator[str | None]:
+    yield from map(get_page, urls)
