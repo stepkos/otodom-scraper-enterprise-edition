@@ -1,9 +1,12 @@
+from time import sleep
 from typing import Iterator
 
+import requests
 from yarl import URL
 from lxml import html
 
 from modules.apartments.models import Apartment, ApartmentDetails
+from modules.scraper.constants.for_scraper import HTTP_HEADERS
 from modules.scraper.constants.parsing_rules import SUBPAGES_FIELD_MAP
 from modules.scraper.utils import get_page
 
@@ -39,7 +42,7 @@ def parse_single_attr_for_subview(elem: html.HtmlElement, attr_name: str):
     text = elem.xpath(SUBVIEW_XPATHS[attr_name])
     if text:
         result = SUBPAGES_FIELD_MAP[attr_name].process_value(text[0])
-        print(result, str(result).lower())
+        # print(result, str(result).lower()) DEBUG
         if "zapytaj" not in str(result).lower() and "brak informacji" not in str(result).lower():
             return result
     return None
@@ -73,9 +76,34 @@ def details_scraper(page: html.HtmlElement):
     )
 
 
+# W apartment dodaj flage czy oczekuje na szczegoly bo
+# niektore ogloszenia moga byc juz usuniete (410) bysmy zaznaczyli ze juz nie oczekije
+# moze jakis status (waiting for details, completed, deleted, waiting for update)
 def main():
-    aprts = Apartment.objects.all()
-    urls = (URL("https://www.otodom.pl" + a.subpage) for a in aprts)
-    for result in details_scraper_iterator(urls):
-        print(result)
-        result.save()
+    apartments_without_details = Apartment.objects.filter(details__isnull=True)
+    count = apartments_without_details.count()
+    for apartment in apartments_without_details:
+        count -= 1
+        url = URL("https://www.otodom.pl" + apartment.subpage)
+        response = requests.get(str(url), headers=HTTP_HEADERS, timeout=10)  # timeotu moze wyrzucic
+        if response.status_code == 410:
+            print("The offer was deleted. Skipping...")
+            continue
+        elif response.status_code != 200:
+            print("Failed to fetch page. Http code:", response.status_code)
+            print("Sleeping for 30 seconds...")
+            sleep(30)
+            continue
+
+        a = details_scraper(html.fromstring(response.text))
+        a.apartment = apartment
+        try:
+            a.save()
+        except Exception as e:
+            print(e)
+
+        print("Apartment saved successfully!. Left:", count, "apartments.")
+        # sleep(.2)
+        # if i % 30 == 0:
+        #     print("Sleeping for 30 seconds...")
+        #     sleep(30)

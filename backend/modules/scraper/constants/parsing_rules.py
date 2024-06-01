@@ -32,15 +32,15 @@ FIELD_MAP: ProcessorDict = {
             [
                 ExtractText(),
                 SplitAndTake(),
-                SpecialCases[str, int](
-                    {
-                        "parter": 0,
-                        "10+": 11,
-                        "poddasze": 12,
-                        "suterena": 13,
-                    },
-                    Caster(int)
-                ),
+                # SpecialCases[str, int](
+                #     {
+                #         "parter": 0,
+                #         "10+": 11,
+                #         "poddasze": 12,
+                #         "suterena": 13,
+                #     },
+                #     Caster(int)
+                # ),
             ]
         ),
     'address': ExtractText(),
