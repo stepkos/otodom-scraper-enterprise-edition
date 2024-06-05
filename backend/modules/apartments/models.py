@@ -19,7 +19,7 @@ class Apartment(BaseModel):
     area = models.DecimalField(verbose_name=_("Area"), max_digits=8, decimal_places=2, blank=True, null=True)
     floor = models.CharField(
         verbose_name=_("Floor"), max_length=20, choices=FloorChoice.choices, blank=True, null=True
-    )
+    )  # floor dodałem rowniez w details poniewaz tutaj jest tylko do 10+
 
     # tmp
     was_deleted = models.BooleanField(verbose_name=_("Was Deleted"), default=False)
@@ -42,6 +42,7 @@ class ApartmentDetails(BaseModel):
     apartment = models.OneToOneField(
         Apartment, verbose_name=_("Apartment"), related_name="details", on_delete=models.SET_NULL, blank=True, null=True
     )
+    # real_floor = models.PositiveSmallIntegerField(verbose_name=_("Real Floor"), blank=True, null=True)
     max_floor = models.PositiveSmallIntegerField(verbose_name=_("Max Floor"), blank=True, null=True)
     rent = models.PositiveSmallIntegerField(verbose_name=_("Rent"), blank=True, null=True)
     energy_certificate = models.CharField(verbose_name=_("Energy Certificate"), max_length=64, blank=True, null=True)
