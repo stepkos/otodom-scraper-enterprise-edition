@@ -7,10 +7,10 @@ def _subview_extra_table_xpath(aria_label: str) -> str:
 
 
 HTTP_HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-                  'AppleWebKit/537.36 (KHTML, like Gecko) '
-                  'Chrome/58.0.3029.110 '
-                  'Safari/537.3'
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/58.0.3029.110 "
+    "Safari/537.3"
 }
 
 
@@ -43,4 +43,6 @@ SUBVIEW_XPATHS = {
     "type_of_development": _subview_extra_table_xpath("Rodzaj zabudowy"),
     "windows": _subview_extra_table_xpath("Okna"),
     "is_elevator": _subview_extra_table_xpath("Winda"),
+    "exact_floors": _subview_datatable_xpath("Piętro"),
+    "exact_rooms": _subview_datatable_xpath("Liczba pokoi"),
 }
