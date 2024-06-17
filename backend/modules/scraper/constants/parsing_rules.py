@@ -1,3 +1,5 @@
+from functools import partial
+
 from modules.scraper.services.parsing_processors import *
 
 FIELD_MAP: ProcessorDict = {
@@ -33,38 +35,40 @@ FIELD_MAP: ProcessorDict = {
     "address": ExtractText(),
 }
 
+ExtractAndSkipHidden = partial(ExctractAndSkipIfIn, ["brak informacji", "zapytaj"])
+
 SUBPAGES_FIELD_MAP: ProcessorDict = {
     "max_floor": Multi[HtmlElement, str](
         [
-            ExtractText(),
+            ExtractAndSkipHidden(),
             SplitAndTake("/", 1),
             TryCaster(int),
         ]
     ),
     "rent": Multi[HtmlElement, str](
         [
-            ExtractText(),
+            ExtractAndSkipHidden(),
             SplitAndTake(),
             TryCaster(int),
         ]
     ),
-    "energy_certificate": ExtractText(),
-    "form_of_the_property": ExtractText(),
-    "finishing_condition": ExtractText(),
-    "balcony_garden_terrace": ExtractText(),
-    "parking_place": ExtractText(),
-    "heating": ExtractText(),
-    "description": ExtractText(),
+    "energy_certificate": ExtractAndSkipHidden(),
+    "form_of_the_property": ExtractAndSkipHidden(),
+    "finishing_condition": ExtractAndSkipHidden(),
+    "balcony_garden_terrace": ExtractAndSkipHidden(),
+    "parking_place": ExtractAndSkipHidden(),
+    "heating": ExtractAndSkipHidden(),
+    "description": ExtractAndSkipHidden(),
     "market": Multi[HtmlElement, str](
-        [ExtractText(), SplitAndTake("}", -1)]  # losowy css
+        [ExtractAndSkipHidden(), SplitAndTake("}", -1)]  # losowy css
     ),
-    "advertisement_type": ExtractText(),
-    "year_of_construction": ExtractText(),
-    "type_of_development": ExtractText(),
-    "windows": ExtractText(),
+    "advertisement_type": ExtractAndSkipHidden(),
+    "year_of_construction": ExtractAndSkipHidden(),
+    "type_of_development": ExtractAndSkipHidden(),
+    "windows": ExtractAndSkipHidden(),
     "is_elevator": Multi[HtmlElement, bool](
         [
-            ExtractText(),
+            ExtractAndSkipHidden(),
             SpecialCases[str, int](
                 {
                     "tak": True,
@@ -72,6 +76,19 @@ SUBPAGES_FIELD_MAP: ProcessorDict = {
                 },
                 Multi(),
             ),
+        ]
+    ),
+    "exact_rooms": Multi[HtmlElement, bool](
+        [
+            ExtractAndSkipHidden(),
+            Caster(int),
+        ]
+    ),
+    "exact_floors": Multi[HtmlElement, bool](
+        [
+            ExtractAndSkipHidden(),
+            SplitAndTake("/", 0),
+            Caster(int),
         ]
     ),
 }

@@ -1,32 +1,19 @@
+from datetime import datetime
 from functools import partial
 from typing import Iterator
 
 from lxml import html
 from yarl import URL
 
-from modules.apartments.models import Apartment, ApartmentDetails
-from modules.scraper.constants.for_scraper import HTTP_HEADERS, SUBVIEW_XPATHS
+from modules.apartments.models import ApartmentDetails
+from modules.scraper.constants.for_scraper import SUBVIEW_XPATHS
 from modules.scraper.constants.parsing_rules import SUBPAGES_FIELD_MAP
+from modules.scraper.services.scraper_listview import parse_single_attr
 from modules.scraper.utils import get_page
 
 
-def __parse_single_attr_for_subview(elem: html.HtmlElement, attr_name: str):
-    text = elem.xpath(SUBVIEW_XPATHS[attr_name])
-    if text:
-        result = SUBPAGES_FIELD_MAP[attr_name].process_value(text[0])
-        # TODO: Ten if jest do refaktoryzacji
-        # ma to byc w parsing_rules
-        # gdyby nie ten if to mozmey uzyc tej samej funkcji co w listview
-        if (
-            "zapytaj" not in str(result).lower()
-            and "brak informacji" not in str(result).lower()
-        ):
-            return result
-    return None
-
-
 def scrape_apartment_details(page: html.HtmlElement):
-    parse = partial(__parse_single_attr_for_subview, page)
+    parse = partial(parse_single_attr, SUBVIEW_XPATHS, SUBPAGES_FIELD_MAP, page)
     return ApartmentDetails(
         market=parse("market"),
         advertisement_type=parse("advertisement_type"),
@@ -43,6 +30,7 @@ def scrape_apartment_details(page: html.HtmlElement):
         parking_place=parse("parking_place"),
         heating=parse("heating"),
         description=parse("description"),
+        lastly_scraped_at=datetime.now(),
     )
 
 

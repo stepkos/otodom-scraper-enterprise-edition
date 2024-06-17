@@ -59,7 +59,8 @@ class Multi(ValueProcessor[A, T]):
     def process_value(self, raw_value: A) -> T:
         result = raw_value
         for processor in self.processors:
-            result = processor.process_value(result)
+            if result:
+                result = processor.process_value(result)
         return result
 
 
@@ -95,6 +96,27 @@ class SpecialCases(ValueProcessor[A, T]):
 class ExtractText(ValueProcessor[HtmlElement, str]):
     def process_value(self, raw_value: HtmlElement) -> str:
         return raw_value.text_content()
+
+
+class SkipIfIn(ValueProcessor[str, str | None]):
+    def __init__(self, keywords_to_skip: list[str]):
+        self.keywords_to_skip = keywords_to_skip
+
+    def process_value(self, raw_value: HtmlElement) -> str | None:
+        value = str(raw_value).lower()
+        if any(keyw.lower() in value for keyw in self.keywords_to_skip):
+            return None
+        return value
+
+
+class ExctractAndSkipIfIn(Multi[HtmlElement, str | None]):
+    def __init__(self, keywords_to_skip: list[str]):
+        super().__init__(
+            [
+                ExtractText(),
+                SkipIfIn(keywords_to_skip),
+            ]
+        )
 
 
 ProcessorDict = dict[str, ValueProcessor]

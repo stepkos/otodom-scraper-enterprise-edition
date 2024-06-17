@@ -5,22 +5,26 @@ from typing import Iterator
 from lxml import html
 from yarl import URL
 
-from modules.apartments.models import Apartment
+from modules.apartments.models import Apartment, ApartmentStatus
 from modules.scraper.constants.for_scraper import LISTVIEW_XPATHS
 from modules.scraper.constants.parsing_rules import FIELD_MAP
+from modules.scraper.services.parsing_processors import ProcessorDict
 from modules.scraper.utils import pages_iterator
 
 
-def __parse_single_attr_for_list_view(elem: html.HtmlElement, attr_name: str):
-    text = elem.xpath(LISTVIEW_XPATHS[attr_name])
-    if text:
-        return FIELD_MAP[attr_name].process_value(text[0])
-    return None
+def parse_single_attr(
+    xpaths_dict: dict[str, str],
+    parse_dict: ProcessorDict,
+    elem: html.HtmlElement,
+    attr_name: str,
+):
+    if text := elem.xpath(xpaths_dict[attr_name]):
+        return parse_dict[attr_name].process_value(text[0])
 
 
 def spec_list_apartments_iterator(page: html.HtmlElement) -> Iterator[Apartment]:
     for html_article in iter(page.xpath(LISTVIEW_XPATHS["offers"])):
-        parse = partial(__parse_single_attr_for_list_view, html_article)
+        parse = partial(parse_single_attr, LISTVIEW_XPATHS, FIELD_MAP, html_article)
         yield Apartment(
             price=parse("price"),
             title=parse("title"),
@@ -29,6 +33,7 @@ def spec_list_apartments_iterator(page: html.HtmlElement) -> Iterator[Apartment]
             area=parse("area"),
             floor=parse("floor"),
             address=parse("address"),
+            status=ApartmentStatus.WAITING_FOR_DETAILS,
         )
 
 

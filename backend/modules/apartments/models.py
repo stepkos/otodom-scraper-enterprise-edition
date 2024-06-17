@@ -7,6 +7,12 @@ from modules.apartments.constants import FloorChoice
 from modules.core.models import BaseModel
 
 
+class ApartmentStatus(models.TextChoices):
+    WAITING_FOR_DETAILS = "WAITING_FOR_DETAILS", _("Awaiting details")
+    SYNCHRONIZED = "SYNCHRONIZED", _("Synchronized")
+    DELETED = "DELETED", _("deleted")
+
+
 class Apartment(BaseModel):
     title = models.CharField(verbose_name=_("Title"), max_length=255)
     address = models.CharField(
@@ -32,6 +38,18 @@ class Apartment(BaseModel):
         blank=True,
         null=True,
     )  # floor dodałem rowniez w details poniewaz tutaj jest tylko do 10+
+
+    status = models.CharField(
+        verbose_name=_("Status"),
+        max_length=20,
+        choices=ApartmentStatus.choices,
+        blank=False,
+        null=False,
+        default=ApartmentStatus.WAITING_FOR_DETAILS,
+    )
+    lastly_scraped_at = (
+        models.DateTimeField(auto_now_add=True, blank=True, null=True),
+    )
 
     # tmp
     was_deleted = models.BooleanField(verbose_name=_("Was Deleted"), default=False)
