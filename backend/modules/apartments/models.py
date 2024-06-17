@@ -1,16 +1,8 @@
-from decimal import Decimal
-
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from modules.apartments.constants import FloorChoice
+from modules.apartments.constants import FloorChoice, ApartmentStatus
 from modules.core.models import BaseModel
-
-
-class ApartmentStatus(models.TextChoices):
-    WAITING_FOR_DETAILS = "WAITING_FOR_DETAILS", _("Awaiting details")
-    SYNCHRONIZED = "SYNCHRONIZED", _("Synchronized")
-    DELETED = "DELETED", _("deleted")
 
 
 class Apartment(BaseModel):

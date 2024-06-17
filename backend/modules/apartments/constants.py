@@ -17,3 +17,9 @@ class FloorChoice(models.TextChoices):
     EIGHTH = "8", "8"
     NINTH = "9", "9"
     TENTH = "10", "10"
+
+
+class ApartmentStatus(models.TextChoices):
+    WAITING_FOR_DETAILS = "WAITING_FOR_DETAILS", _("Awaiting details")
+    SYNCHRONIZED = "SYNCHRONIZED", _("Synchronized")
+    DELETED = "DELETED", _("deleted")

@@ -30,7 +30,6 @@ def scrape_apartment_details(page: html.HtmlElement):
         parking_place=parse("parking_place"),
         heating=parse("heating"),
         description=parse("description"),
-        lastly_scraped_at=datetime.now(),
     )
 
 
