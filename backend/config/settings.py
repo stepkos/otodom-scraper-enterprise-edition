@@ -155,7 +155,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # celery broker and result
 CELERY_BROKER_URL = os.environ.get("BROKER_URL", "redis://localhost:6379/0")
-CELERY_RESULT_BACKEND = os.environ.get("RESULT_BACKEND", "redis://localhost:6379/0")
+# CELERY_RESULT_BACKEND = os.environ.get("RESULT_BACKEND", "redis://localhost:6379/0")
+
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
+
+CELERY_RESULT_EXTENDED = True
 # CELERY_CACHE_BACKEND = os.environ.get("CACHE_BACKEND", "redis://localhost:6379/0")
 
 # django-celery-beat
