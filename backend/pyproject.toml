@@ -1,0 +1,21 @@
+[tool.isort]
+profile = "black"
+skip = ["manage.py", "migrations", "export", "media", "requirements.txt", "venv", ".venv", ".mypy_cache"]
+
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+exclude = '''
+/(
+    manage.py
+|   migrations
+|   export
+|   media
+|   requirements.txt
+|   venv
+|   .git
+|   .venv
+|   .mypy_cache
+)/
+'''
