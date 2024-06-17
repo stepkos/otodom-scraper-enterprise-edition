@@ -35,7 +35,7 @@ FIELD_MAP: ProcessorDict = {
     "address": ExtractText(),
 }
 
-ExtractAndSkipHidden = partial(ExctractAndSkipIfIn, ["brak informacji", "zapytaj"])
+ExtractAndSkipHidden = partial(ExtractAndSkipIfIn, ["brak informacji", "zapytaj"])
 
 SUBPAGES_FIELD_MAP: ProcessorDict = {
     "max_floor": Multi[HtmlElement, str](

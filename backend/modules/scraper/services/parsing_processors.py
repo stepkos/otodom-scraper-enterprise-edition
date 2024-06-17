@@ -109,7 +109,7 @@ class SkipIfIn(ValueProcessor[str, str | None]):
         return value
 
 
-class ExctractAndSkipIfIn(Multi[HtmlElement, str | None]):
+class ExtractAndSkipIfIn(Multi[HtmlElement, str | None]):
     def __init__(self, keywords_to_skip: list[str]):
         super().__init__(
             [
