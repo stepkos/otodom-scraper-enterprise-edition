@@ -1,4 +1,4 @@
-from typing import Iterator, Iterable
+from typing import Iterable, Iterator
 
 import requests
 from yarl import URL
@@ -7,7 +7,7 @@ from modules.scraper.constants.for_scraper import HTTP_HEADERS
 
 
 def url_paginator(
-    url: URL, param_name: str = 'page', start: int = 1, end: int | None = None
+    url: URL, param_name: str = "page", start: int = 1, end: int | None = None
 ) -> Iterator[URL]:
     i = start
     if end is not None:
@@ -31,7 +31,7 @@ def get_page(url: URL) -> str | None:
 
 
 def pages_iterator(
-    url: URL, param_name: str = 'page', start: int = 1, end: int | None = None
+    url: URL, param_name: str = "page", start: int = 1, end: int | None = None
 ) -> Iterator[str | None]:
     for url in url_paginator(url, param_name, start, end):
         yield get_page(url)

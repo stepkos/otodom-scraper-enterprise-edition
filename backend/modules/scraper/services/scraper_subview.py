@@ -1,8 +1,8 @@
 from functools import partial
 from typing import Iterator
 
-from yarl import URL
 from lxml import html
+from yarl import URL
 
 from modules.apartments.models import Apartment, ApartmentDetails
 from modules.scraper.constants.for_scraper import HTTP_HEADERS, SUBVIEW_XPATHS
@@ -17,7 +17,10 @@ def __parse_single_attr_for_subview(elem: html.HtmlElement, attr_name: str):
         # TODO: Ten if jest do refaktoryzacji
         # ma to byc w parsing_rules
         # gdyby nie ten if to mozmey uzyc tej samej funkcji co w listview
-        if "zapytaj" not in str(result).lower() and "brak informacji" not in str(result).lower():
+        if (
+            "zapytaj" not in str(result).lower()
+            and "brak informacji" not in str(result).lower()
+        ):
             return result
     return None
 
@@ -39,7 +42,7 @@ def scrape_apartment_details(page: html.HtmlElement):
         balcony_garden_terrace=parse("balcony_garden_terrace"),
         parking_place=parse("parking_place"),
         heating=parse("heating"),
-        description=parse("description")
+        description=parse("description"),
     )
 
 

@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from modules.core.models import BaseModel
 from modules.scraper.constants.for_models import ScrapeStatusChoice
 
-
 # class Url(BaseModel):
 #     ...
 

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, Callable
+from typing import Callable, Generic, TypeVar
 
 from lxml.html import HtmlElement
 

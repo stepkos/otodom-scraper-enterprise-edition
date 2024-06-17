@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from modules.apartments.models import Apartment, ApartmentDetails
 
 

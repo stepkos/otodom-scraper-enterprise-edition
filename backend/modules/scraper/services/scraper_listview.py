@@ -2,13 +2,13 @@ from functools import partial
 from time import sleep
 from typing import Iterator
 
-from yarl import URL
 from lxml import html
+from yarl import URL
 
 from modules.apartments.models import Apartment
 from modules.scraper.constants.for_scraper import LISTVIEW_XPATHS
-from modules.scraper.utils import pages_iterator
 from modules.scraper.constants.parsing_rules import FIELD_MAP
+from modules.scraper.utils import pages_iterator
 
 
 def __parse_single_attr_for_list_view(elem: html.HtmlElement, attr_name: str):
