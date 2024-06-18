@@ -3,24 +3,26 @@ from celery.utils.log import get_task_logger
 from modules.apartments.models import Apartment
 from modules.core.utils import celery_task
 from modules.scraper.services.custom_logger import CustomLogger
-from modules.scraper.services.scraper import ScraperService
 
 celery_logger = get_task_logger(__name__)
 
+DEFAULT_CELERY_DELAY_SECONDS = 3
+
 
 @celery_task
-def fetch_apartment_details_task(self, apartment: Apartment):
-    # create details or update if exists
-    ...
+def fetch_apartment_details_task(_, apartment_id):
+    from modules.scraper.services.scraper import ScraperService
+
+    apartment = Apartment.objects.get(id=apartment_id)
+    logger = CustomLogger(celery_logger)
+    ScraperService(logger).fetch_apartment_details(apartment)
+    return logger.get_result_dict()
 
 
 @celery_task
 def fetch_apartments_task(_, url: str):
+    from modules.scraper.services.scraper import ScraperService
+
     logger = CustomLogger(celery_logger)
-    next_page_url = ScraperService(logger).fetch_apartments(url)
-    if next_page_url is not None:
-        fetch_apartments_task.apply_async(
-            args=[str(next_page_url)],
-            countdown=3,  # run next in 3 sec
-        )
+    ScraperService(logger).fetch_apartments(url)
     return logger.get_result_dict()

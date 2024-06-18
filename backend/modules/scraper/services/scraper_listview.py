@@ -1,15 +1,12 @@
 from functools import partial
-from time import sleep
 from typing import Iterator
 
 from lxml import html
-from yarl import URL
 
-from modules.apartments.models import Apartment, ApartmentStatus
+from modules.apartments.models import ApartmentStatus
 from modules.scraper.constants.for_scraper import LISTVIEW_XPATHS
 from modules.scraper.constants.parsing_rules import FIELD_MAP
 from modules.scraper.services.parsing_processors import parse_single_attr
-from modules.scraper.utils import pages_iterator
 
 
 def spec_list_apartments_iterator(page: html.HtmlElement) -> Iterator[dict]:

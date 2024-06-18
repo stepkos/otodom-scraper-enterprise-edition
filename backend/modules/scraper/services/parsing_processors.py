@@ -59,8 +59,7 @@ class Multi(ValueProcessor[A, T]):
     def process_value(self, raw_value: A) -> T:
         result = raw_value
         for processor in self.processors:
-            if result is not None:
-                result = processor.process_value(result)
+            result = processor.process_value(result)
         return result
 
 
@@ -98,35 +97,29 @@ class ExtractText(ValueProcessor[HtmlElement, str]):
         return raw_value.text_content()
 
 
-class SkipIfIn(ValueProcessor[str, str | None]):
-    def __init__(self, keywords_to_skip: list[str]):
-        self.keywords_to_skip = keywords_to_skip
-
-    def process_value(self, raw_value: HtmlElement) -> str | None:
-        value = str(raw_value).lower()
-        if any(keyw.lower() in value for keyw in self.keywords_to_skip):
-            return None
-        return value
+# s
 
 
-class ExtractAndSkipIfIn(Multi[HtmlElement, str | None]):
-    def __init__(self, keywords_to_skip: list[str]):
-        super().__init__(
-            [
-                ExtractText(),
-                SkipIfIn(keywords_to_skip),
-            ]
-        )
+# class ExtractAndSkipIfIn(Multi[HtmlElement, str | None]):
+#     def __init__(self, keywords_to_skip: list[str]):
+#         super().__init__(
+#             [
+#                 ExtractText(),
+#                 SkipIfIn(keywords_to_skip),
+#             ]
+#         )
 
 
 ProcessorDict = dict[str, ValueProcessor]
 
 
 def parse_single_attr(
-    xpaths_dict: dict[str, str],
-    parse_dict: ProcessorDict,
-    elem: HtmlElement,
-    attr_name: str,
+        xpaths_dict: dict[str, str],
+        parse_dict: ProcessorDict,
+        elem: HtmlElement,
+        attr_name: str,
 ):
     if text := elem.xpath(xpaths_dict[attr_name]):
-        return parse_dict[attr_name].process_value(text[0])
+        val = parse_dict[attr_name].process_value(text[0])
+        return val
+    return None

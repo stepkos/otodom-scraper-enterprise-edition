@@ -13,7 +13,7 @@ class CustomLogger:
 
     def log_info(self, info: str):
         self.logs.append(info)
-        self._logger.info(info)
+        # self._logger.info(info)
 
     def get_result_dict(self):
         return {"success": self.success, "errors": self.errors, "logs": self.logs}

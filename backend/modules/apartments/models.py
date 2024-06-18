@@ -1,5 +1,6 @@
-from django.db import IntegrityError, models
+from django.db import models
 from django.utils.translation import gettext_lazy as _
+from yarl import URL
 
 from modules.apartments.constants import ApartmentStatus, FloorChoice
 from modules.core.models import BaseModel
@@ -58,6 +59,9 @@ class Apartment(BaseModel):
 
     def __str__(self):
         return f"Apartment(title={self.title[:20]}, price={self.price})"
+
+    def get_abs_details_url(self):
+        return URL("https://www.otodom.pl" + self.subpage)
 
 
 class ApartmentDetails(BaseModel):

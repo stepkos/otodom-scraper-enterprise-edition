@@ -7,3 +7,5 @@ from modules.core.models import CeleryResult
 class CeleryResultAdmin(admin.ModelAdmin):
     list_display = "task_name", "task_id", "result"
     readonly_fields = "created_at", "updated_at"
+    search_fields = "task_name",
+    ordering = ("created_at",)
