@@ -44,3 +44,4 @@ vine==5.1.0
 wcwidth==0.2.13
 wheel==0.43.0
 yarl==1.9.4
+python-dotenv==1.0.1

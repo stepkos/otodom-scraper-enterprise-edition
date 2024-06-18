@@ -16,4 +16,6 @@ class BaseModel(models.Model):
 
 
 class CeleryResult(BaseModel):
-    result = models.JSONField()
+    task_id = models.CharField(max_length=255, unique=True)
+    task_name = models.CharField(max_length=255)
+    result = models.JSONField(null=True, blank=True)
