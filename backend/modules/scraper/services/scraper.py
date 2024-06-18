@@ -1,4 +1,3 @@
-from django.db import IntegrityError
 from yarl import URL
 
 from modules.apartments.models import Apartment
@@ -16,20 +15,7 @@ class ScraperService:
         try:
             for apart_data in scrap_single_list_page(page=get_page(url)):
                 try:
-                    defaults = {
-                        key: value
-                        for key, value in apart_data.items()
-                        if key != "subpage"
-                    }
-                    existing_apart, created = Apartment.objects.update_or_create(
-                        # TODO: check if this works as it should, cause I've struggled a bit
-                        subpage=apart_data["subpage"],
-                        defaults=defaults,
-                    )
-                    if not created:
-                        self.logger.log_info(f"Updated: {apart_data}")
-                    else:
-                        self.logger.log_info(f"Created: {apart_data}")
+                    self._save_or_update(apart_data, "subpage", Apartment)
                 except Exception as e:
                     self.logger.log_error(f"Error processing {apart_data}: {e}")
             return get_next_page_url(url)
@@ -37,3 +23,18 @@ class ScraperService:
         except StopIteration:
             self.logger.log_info(f"No more pages to iterate")
             return None
+
+    def _save_or_update(self, dict_data: dict, unique_key_name: str, ModelClass):
+        existing_apart, created = ModelClass.objects.update_or_create(
+            # TODO: check if this works as it should, cause I've struggled a bit
+            subpage=dict_data[unique_key_name],
+            defaults={
+                key: value
+                for key, value in dict_data.items()
+                if key != unique_key_name
+            },
+        )
+        if not created:
+            self.logger.log_info(f"Updated: {dict_data}")
+        else:
+            self.logger.log_info(f"Created: {dict_data}")
