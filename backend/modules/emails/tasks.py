@@ -14,6 +14,7 @@ def send_offers(receiver: str, offers: list[tuple[Apartment, ApartmentDetails]])
     logger.info(f"Email success: {is_success}")
     return is_success
 
+
 @shared_task
 def test_mail(receiver: str) -> bool:
     aps = list(Apartment.objects.all()[:5])

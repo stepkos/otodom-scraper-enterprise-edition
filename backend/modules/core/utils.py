@@ -1,11 +1,11 @@
 from functools import wraps
 
-from config.celery import app
+from config import celery_app
 from modules.core.models import CeleryResult
 
 
 def celery_task(func):
-    @app.task(bind=True, ignore_result=False)
+    @celery_app.task(bind=True, ignore_result=False)
     @wraps(func)
     def wrapper(*args, **kwargs):
         task_id = kwargs.get('task_id', None) or args[0].request.id
