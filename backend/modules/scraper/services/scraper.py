@@ -1,7 +1,9 @@
 from typing import Any
 
+from celery.worker.state import requests
 from yarl import URL
 
+from modules.apartments.constants import ApartmentStatus
 from modules.apartments.models import Apartment, ApartmentDetails
 from modules.scraper.services.custom_logger import CustomLogger
 from modules.scraper.services.scraper_listview import scrap_single_list_page
@@ -16,10 +18,18 @@ class ScraperService:
         self.logger = logger
 
     def fetch_apartment_details(self, apartment: Apartment):
-        url = apartment.get_abs_details_url()
-        apart_details_data = scrape_apartment_details(html.fromstring(get_page(URL(url))))
-        apart_details_data["apartment_id"] = apartment.id
-        self._save_or_update(apart_details_data, "apartment_id", ApartmentDetails)
+        try:
+            url = apartment.get_abs_details_url()
+            apart_details_data = scrape_apartment_details(html.fromstring(get_page(URL(url))))
+            apart_details_data["apartment_id"] = apartment.id
+            self._save_or_update(apart_details_data, "apartment_id", ApartmentDetails)
+
+            apartment.status = ApartmentStatus.SYNCHRONIZED
+            apartment.save()
+        except requests.RequestException:
+            apartment.status = ApartmentStatus.DELETED
+            apartment.save()
+
         return list(map(str, apart_details_data.items()))
 
     def fetch_apartments(self, url: str) -> URL | None:
