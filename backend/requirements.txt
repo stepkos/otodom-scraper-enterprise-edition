@@ -12,7 +12,6 @@ click-repl==0.3.0
 cron-descriptor==1.4.3
 Django==5.0.6
 django-celery-beat==2.6.0
-django-celery-results==2.5.1
 django-extensions==3.2.3
 django-filter==24.2
 django-timezone-field==6.1.0
