@@ -46,12 +46,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Installed apps
     "rest_framework",
-    "django_celery_beat",
-    "django_celery_results",
     # Modules
     "modules.apartments",
     "modules.core",
     "modules.scraper",
+    "django_celery_beat",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -146,20 +146,14 @@ STATIC_ROOT = BASE_DIR / "django_static"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# celery broker and result
-CELERY_BROKER_URL = os.environ.get("BROKER_URL", "redis://localhost:6379/0")
-# CELERY_RESULT_BACKEND = os.environ.get("RESULT_BACKEND", "redis://localhost:6379/0")
-
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_CACHE_BACKEND = 'django-cache'
-
-CELERY_RESULT_EXTENDED = True
-# CELERY_CACHE_BACKEND = os.environ.get("CACHE_BACKEND", "redis://localhost:6379/0")
-
-# django-celery-beat
-CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
-
-# TODO: DODAJJJJ EMAIL
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': "redis://localhost:6379/0",
+    }
+}
 EMAIL_USER = os.environ.get("EMAIL_USER")
 EMAIL_APP_CLIENT_ACCESS_CODE = os.environ.get("EMAIL_APP_CLIENT_ACCESS_CODE")
+
+CELERY_BROKER_URL = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "django-db")

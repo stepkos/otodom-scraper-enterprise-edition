@@ -13,3 +13,7 @@ class BaseModel(models.Model):
 
     def __str__(self):
         return f"{self.__class__.__name__}(id={self.id})"
+
+
+class CeleryResult(BaseModel):
+    result = models.JSONField()

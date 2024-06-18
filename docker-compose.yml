@@ -52,6 +52,28 @@ services:
         depends_on:
             - server
             - redis
+    beat:
+        restart: unless-stopped
+        build:
+            context: .
+            dockerfile: ./docker/backend/Dockerfile
+        entrypoint: /app/docker/backend/beat-entrypoint.sh
+        volumes:
+            #            - static_volume:/app/backend/django_static
+            - ./backend:/app/backend
+        environment:
+            DEBUG: "True"
+            CELERY_BROKER_URL: "redis://redis:6379/0"
+            CELERY_RESULT_BACKEND: "redis://redis:6379/0"
+            DJANGO_DB: postgresql
+            POSTGRES_HOST: db
+            POSTGRES_NAME: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_PORT: 5432
+        depends_on:
+            - server
+            - redis
     redis:
         restart: unless-stopped
         image: redis:7.0.5-alpine 

@@ -1,12 +1,13 @@
-from celery.utils.log import get_task_logger
 from celery import shared_task
+from celery.utils.log import get_task_logger
+
+from config.celery import app
 
 logger = get_task_logger(__name__)
 
 
-@shared_task
-def hello():
+@app.task(bind=True, ignore_result=False)
+def hello(self):
     logger.info("Hello world")
-    return "hello world"
-
-
+    logger.info(self)
+    return {"nice": "hello world"}
