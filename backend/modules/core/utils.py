@@ -11,7 +11,7 @@ def celery_task(func):
         task_id = kwargs.get('task_id', None) or args[0].request.id
         task_name = kwargs.get('task_name', None) or args[0].name
         result = func(*args, **kwargs)
-        CeleryResult.objects.create(task_id=task_id, result=result, task_name=task_name)
+        CeleryResult.objects.create(task_id=task_id, task_name=task_name, result=result)
         return result
 
     return wrapper

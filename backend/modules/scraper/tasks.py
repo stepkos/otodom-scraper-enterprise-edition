@@ -18,6 +18,9 @@ def fetch_apartment_details(self, apartment: Apartment):
     # create details or update if exists
     ...
 
+@celery_task
+def fetch_apartments_from_list(self, url: str):
+    ...
 
 @celery_task
 def follow_apartments_by_url(self, url: str):
