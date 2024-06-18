@@ -17,8 +17,9 @@ def fetch_apartment_details_task(_, apartment_id):
     apartment = Apartment.objects.get(id=apartment_id)
     celery_logger.info(apartment_id)
     logger = CustomLogger(celery_logger)
-    ScraperService(logger).fetch_apartment_details(apartment)
-    return logger.get_result_dict()
+    r = logger.get_result_dict()
+    r['apartments'] = ScraperService(logger).fetch_apartment_details(apartment)
+    return r
 
 
 @celery_task

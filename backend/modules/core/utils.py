@@ -1,5 +1,4 @@
 from functools import wraps
-import inspect
 
 from config import celery_app
 from modules.core.models import CeleryResult

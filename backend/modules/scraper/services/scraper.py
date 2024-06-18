@@ -1,3 +1,5 @@
+from typing import Any
+
 from yarl import URL
 
 from modules.apartments.models import Apartment, ApartmentDetails
@@ -13,11 +15,12 @@ class ScraperService:
     def __init__(self, logger: CustomLogger):
         self.logger = logger
 
-    def fetch_apartment_details(self, apartment: Apartment) -> None:
+    def fetch_apartment_details(self, apartment: Apartment):
         url = apartment.get_abs_details_url()
         apart_details_data = scrape_apartment_details(html.fromstring(get_page(URL(url))))
         apart_details_data["apartment_id"] = apartment.id
         self._save_or_update(apart_details_data, "apartment_id", ApartmentDetails)
+        return list(map(str, apart_details_data.items()))
 
     def fetch_apartments(self, url: str) -> URL | None:
         url = URL(url)
