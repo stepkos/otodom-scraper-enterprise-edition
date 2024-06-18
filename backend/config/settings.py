@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -160,6 +163,6 @@ CELERY_RESULT_EXTENDED = True
 # django-celery-beat
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
-# TODO: DODAJJJJ EMAIL
+# Email settings
 EMAIL_USER = os.environ.get("EMAIL_USER")
 EMAIL_APP_CLIENT_ACCESS_CODE = os.environ.get("EMAIL_APP_CLIENT_ACCESS_CODE")

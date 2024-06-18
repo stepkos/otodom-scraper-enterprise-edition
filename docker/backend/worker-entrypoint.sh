@@ -9,6 +9,7 @@ done
 #celery -A config worker --loglevel=info --concurrency 1 -E
 celery -A config worker --loglevel=info
 
+sleep 5
 # run celery beat
 #celery -A config worker -l info -B --scheduler django_celery_beat.schedulers:DatabaseScheduler
 celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
