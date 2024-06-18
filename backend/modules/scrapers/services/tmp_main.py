@@ -5,9 +5,9 @@ from lxml import html
 from yarl import URL
 
 from modules.apartments.models import Apartment
-from modules.scraper.constants.for_scraper import HTTP_HEADERS
-from modules.scraper.services.scraper_listview import apartments_iterator
-from modules.scraper.services.scraper_subview import scrape_apartment_details
+from modules.scrapers.constants.for_scraper import HTTP_HEADERS
+from modules.scrapers.services.scraper_listview import apartments_iterator
+from modules.scrapers.services.scraper_subview import scrape_apartment_details
 
 
 def get_listview_aparts():

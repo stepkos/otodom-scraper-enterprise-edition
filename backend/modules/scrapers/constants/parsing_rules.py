@@ -1,4 +1,4 @@
-from modules.scraper.services.parsing_processors import *
+from modules.scrapers.services.parsing_processors import *
 
 FIELD_MAP: ProcessorDict = {
     "price": Multi[HtmlElement, str](

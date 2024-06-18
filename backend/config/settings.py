@@ -54,9 +54,10 @@ INSTALLED_APPS = [
     "django_celery_beat",
     # Modules
     "modules.apartments",
-    "modules.emails",
     "modules.core",
-    "modules.scraper",
+    "modules.emails",
+    "modules.scrapers",
+    "modules.valuations",
 ]
 
 MIDDLEWARE = [

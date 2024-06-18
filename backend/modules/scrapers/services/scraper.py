@@ -5,11 +5,11 @@ from yarl import URL
 
 from modules.apartments.constants import ApartmentStatus
 from modules.apartments.models import Apartment, ApartmentDetails
-from modules.scraper.services.custom_logger import CustomLogger
-from modules.scraper.services.scraper_listview import scrap_single_list_page
-from modules.scraper.services.scraper_subview import scrape_apartment_details
-from modules.scraper.tasks import fetch_apartment_details_task, DEFAULT_CELERY_DELAY_SECONDS, fetch_apartments_task
-from modules.scraper.utils import get_next_page_url, get_page
+from modules.scrapers.services.custom_logger import CustomLogger
+from modules.scrapers.services.scraper_listview import scrap_single_list_page
+from modules.scrapers.services.scraper_subview import scrape_apartment_details
+from modules.scrapers.tasks import fetch_apartment_details_task, DEFAULT_CELERY_DELAY_SECONDS, fetch_apartments_task
+from modules.scrapers.utils import get_next_page_url, get_page
 from lxml import html
 
 

@@ -2,9 +2,9 @@ from functools import partial
 
 from lxml import html
 
-from modules.scraper.constants.for_scraper import SUBVIEW_XPATHS
-from modules.scraper.constants.parsing_rules import SUBPAGES_FIELD_MAP
-from modules.scraper.services.scraper_listview import parse_single_attr
+from modules.scrapers.constants.for_scraper import SUBVIEW_XPATHS
+from modules.scrapers.constants.parsing_rules import SUBPAGES_FIELD_MAP
+from modules.scrapers.services.scraper_listview import parse_single_attr
 
 
 def scrape_apartment_details(page: html.HtmlElement) -> dict:
