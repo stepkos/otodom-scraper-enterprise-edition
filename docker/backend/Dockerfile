@@ -7,7 +7,7 @@ WORKDIR /app
 
 RUN pip install --upgrade pip
 RUN pip install gunicorn
-ADD ./requirements.txt /app/
+ADD ./backend/requirements.txt /app/
 RUN pip install -r requirements.txt
 
 ADD ./backend /app/backend

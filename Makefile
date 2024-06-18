@@ -11,4 +11,4 @@ pip-install:
 	docker-compose exec server pip3 install $(filter-out $@,$(MAKECMDGOALS))
 
 pip-freeze:
-	docker-compose exec server pip3 freeze > requirements.txt
+	docker-compose exec server pip3 freeze > backend/requirements.txt
