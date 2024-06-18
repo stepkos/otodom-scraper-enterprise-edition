@@ -120,3 +120,13 @@ class ExtractAndSkipIfIn(Multi[HtmlElement, str | None]):
 
 
 ProcessorDict = dict[str, ValueProcessor]
+
+
+def parse_single_attr(
+        xpaths_dict: dict[str, str],
+        parse_dict: ProcessorDict,
+        elem: HtmlElement,
+        attr_name: str,
+):
+    if text := elem.xpath(xpaths_dict[attr_name]):
+        return parse_dict[attr_name].process_value(text[0])
