@@ -18,4 +18,11 @@ class BaseModel(models.Model):
 class CeleryResult(BaseModel):
     task_id = models.CharField(max_length=255, unique=True)
     task_name = models.CharField(max_length=255)
+    arguments = models.JSONField(null=True, blank=True)
+    is_success = models.BooleanField(null=False, blank=False, default=True)
     result = models.JSONField(null=True, blank=True)
+    errors = models.JSONField(null=True, blank=True)
+    logs = models.JSONField(null=True, blank=True)
+
+
+
