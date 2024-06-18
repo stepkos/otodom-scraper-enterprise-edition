@@ -1,8 +1,9 @@
 from typing import Iterable, Iterator
 
 import requests
-from modules.scraper.constants.for_scraper import HTTP_HEADERS
 from yarl import URL
+
+from modules.scraper.constants.for_scraper import HTTP_HEADERS
 
 
 def get_next_page_url(

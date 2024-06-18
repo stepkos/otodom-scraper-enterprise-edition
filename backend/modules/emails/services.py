@@ -1,8 +1,9 @@
 from datetime import datetime
 from typing import Sequence
 
-from config import settings
 from django.utils.translation import gettext as _
+
+from config import settings
 from modules.apartments.models import Apartment, ApartmentDetails
 from modules.emails.body_templates import get_message_template
 from modules.emails.utils import create_message, send_email

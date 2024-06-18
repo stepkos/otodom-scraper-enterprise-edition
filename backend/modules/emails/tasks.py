@@ -1,5 +1,6 @@
 from celery import shared_task
 from celery.utils.log import get_task_logger
+
 from modules.apartments.models import Apartment, ApartmentDetails
 from modules.emails.services import EmailService
 

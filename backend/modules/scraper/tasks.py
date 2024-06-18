@@ -1,4 +1,5 @@
 from celery.utils.log import get_task_logger
+
 from modules.apartments.models import Apartment
 from modules.core.utils import celery_task
 from modules.scraper.services.custom_logger import CustomLogger
