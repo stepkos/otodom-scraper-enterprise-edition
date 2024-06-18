@@ -49,12 +49,14 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Installed apps
     "rest_framework",
-    # Modules
-    "modules.apartments",
-    "modules.core",
-    "modules.scraper",
+    "django_extensions",
     "django_celery_beat",
     "django_celery_results",
+    # Modules
+    "modules.apartments",
+    "modules.emails",
+    "modules.core",
+    "modules.scraper",
 ]
 
 MIDDLEWARE = [
@@ -155,8 +157,13 @@ CACHES = {
         'LOCATION': "redis://localhost:6379/0",
     }
 }
-EMAIL_USER = os.environ.get("EMAIL_USER")
-EMAIL_APP_CLIENT_ACCESS_CODE = os.environ.get("EMAIL_APP_CLIENT_ACCESS_CODE")
 
+# Celery settings
 CELERY_BROKER_URL = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379/0")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", "django-db")
+CELERY_RESULT_EXTENDED = True
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# Email settings
+EMAIL_USER = os.environ.get("EMAIL_USER")
+EMAIL_APP_CLIENT_ACCESS_CODE = os.environ.get("EMAIL_APP_CLIENT_ACCESS_CODE")
