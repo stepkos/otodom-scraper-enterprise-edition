@@ -1,4 +1,4 @@
-from modules.apartments.models import ApartmentDetails, Apartment
+from modules.apartments.models import Apartment, ApartmentDetails
 
 
 def get_single_offer_template(apart: Apartment, details: ApartmentDetails):
@@ -17,7 +17,8 @@ def get_single_offer_template(apart: Apartment, details: ApartmentDetails):
 
 
 def get_message_template(offers: list[tuple[Apartment, ApartmentDetails]]):
-    return """<!DOCTYPE html>
+    return (
+        """<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -56,10 +57,17 @@ def get_message_template(offers: list[tuple[Apartment, ApartmentDetails]]):
         <div class="container">
             <h1>Exclusive Apartment Offers!</h1>
             <p class="offer">Check out our latest apartment deals:</p>
-            <ul>""" + ("\n".join(list(get_single_offer_template(item[0], item[1]) for item in offers))) + """
+            <ul>"""
+        + (
+            "\n".join(
+                list(get_single_offer_template(item[0], item[1]) for item in offers)
+            )
+        )
+        + """
             </ul>
             <p>Don't miss out! Click below to explore these amazing apartments:</p>
             <a href="{{ subpage }}" class="cta-button">Explore Apartments</a>
         </div>
     </body>
     </html>"""
+    )

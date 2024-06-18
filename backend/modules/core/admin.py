@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from modules.core.models import CeleryResult
 
 

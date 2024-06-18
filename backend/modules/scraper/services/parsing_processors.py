@@ -59,7 +59,7 @@ class Multi(ValueProcessor[A, T]):
     def process_value(self, raw_value: A) -> T:
         result = raw_value
         for processor in self.processors:
-            if result:
+            if result is not None:
                 result = processor.process_value(result)
         return result
 
@@ -123,10 +123,10 @@ ProcessorDict = dict[str, ValueProcessor]
 
 
 def parse_single_attr(
-        xpaths_dict: dict[str, str],
-        parse_dict: ProcessorDict,
-        elem: HtmlElement,
-        attr_name: str,
+    xpaths_dict: dict[str, str],
+    parse_dict: ProcessorDict,
+    elem: HtmlElement,
+    attr_name: str,
 ):
     if text := elem.xpath(xpaths_dict[attr_name]):
         return parse_dict[attr_name].process_value(text[0])

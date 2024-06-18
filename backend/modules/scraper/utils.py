@@ -1,9 +1,17 @@
 from typing import Iterable, Iterator
 
 import requests
+from modules.scraper.constants.for_scraper import HTTP_HEADERS
 from yarl import URL
 
-from modules.scraper.constants.for_scraper import HTTP_HEADERS
+
+def get_next_page_url(
+    url: URL, param_name: str = "page", start: int = 1, step: int = 1
+) -> URL:
+    current_page = start
+    if param_name in url.query:
+        current_page = int(url.query[param_name])
+    return url.update_query({param_name: current_page + step})
 
 
 def url_paginator(
@@ -26,7 +34,6 @@ def get_page(url: URL) -> str | None:
     response = requests.get(str(url), headers=HTTP_HEADERS)
     if response.status_code == 200:
         return response.text
-    # TODO log error
     return None
 
 

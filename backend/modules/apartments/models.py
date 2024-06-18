@@ -1,7 +1,6 @@
-from django.db import models
+from django.db import models, IntegrityError
 from django.utils.translation import gettext_lazy as _
-
-from modules.apartments.constants import FloorChoice, ApartmentStatus
+from modules.apartments.constants import ApartmentStatus, FloorChoice
 from modules.core.models import BaseModel
 
 

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -151,9 +152,9 @@ STATIC_ROOT = BASE_DIR / "django_static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': "redis://localhost:6379/0",
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "redis://localhost:6379/0",
     }
 }
 
