@@ -20,7 +20,7 @@ def fetch_apartment_details_task(logger: CustomLogger, _, apartment_id):
 @celery_task
 def valuate_task(__, _, ___, apartment_id):
     apartment = Apartment.objects.get(id=apartment_id)
-    apartment.estimated_price = apartment.price + apartment.quantity * random()
+    apartment.estimated_price = apartment.price + apartment.price * random()
     apartment.save()
 
 
