@@ -22,8 +22,8 @@ def fetch_apartment_details_task(logger: CustomLogger, _, apartment_id):
 @celery_task
 def valuate_task(logger, _, ___, apartment_id):
     apartment = Apartment.objects.get(id=apartment_id)
-    if est_price := predict_with_scalers_from_apartment(apartment):
-        apartment.estimated_price = Decimal(str(est_price))
+    if apartment.details is not None and (est_price := predict_with_scalers_from_apartment(apartment)):
+        apartment.estimated_price = Decimal(str(est_price * float(apartment.area)))
         logger.log_info(f"Estimated market price: {est_price}")
         apartment.status = ApartmentStatus.VALUATED
         apartment.save()
