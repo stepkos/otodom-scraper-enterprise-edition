@@ -170,3 +170,19 @@ class ApartmentDetails(BaseModel):
 
     def __str__(self):
         return f"{self.apartment} - details"
+
+    @property
+    def a_title(self):
+        return self.apartment.title
+
+    @property
+    def a_id(self):
+        return self.apartment.id
+
+    @property
+    def a_price(self):
+        return self.apartment.price
+
+    @property
+    def a_estimated_price(self):
+        return self.apartment.estimated_price

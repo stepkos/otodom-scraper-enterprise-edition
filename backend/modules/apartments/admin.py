@@ -12,4 +12,7 @@ class ApartmentAdmin(admin.ModelAdmin):
     readonly_fields = "subpage", "created_at", "updated_at"
 
 
-admin.site.register(ApartmentDetails)
+@admin.register(ApartmentDetails)
+class ApartmentDetailsAdmin(admin.ModelAdmin):
+    list_display = "a_title", "a_price", "a_estimated_price"
+    search_fields = "a_title", "a_id", "id"

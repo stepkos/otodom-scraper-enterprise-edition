@@ -20,12 +20,15 @@ def fetch_apartment_details_task(logger: CustomLogger, _, apartment_id):
 
 
 @celery_task
-def valuate_task(__, _, ___, apartment_id):
+def valuate_task(logger, _, ___, apartment_id):
     apartment = Apartment.objects.get(id=apartment_id)
-    if apartment.price and (est_price := predict_with_scalers_from_apartment(apartment)):
+    if est_price := predict_with_scalers_from_apartment(apartment):
         apartment.estimated_price = Decimal(str(est_price))
+        logger.log_info(f"Estimated market price: {est_price}")
         apartment.status = ApartmentStatus.VALUATED
         apartment.save()
+    else:
+        logger.log_error(f"Could not estimate for this apartment: {apartment_id}, details: {apartment.details.id}")
 
 
 @celery_task
