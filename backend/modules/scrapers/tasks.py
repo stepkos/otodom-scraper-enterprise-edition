@@ -1,9 +1,11 @@
+from random import random
+
 from celery import group
 
-from modules.apartments.constants import ApartmentStatus
 from modules.apartments.models import Apartment
 from modules.core.utils import celery_task
-from modules.emails.tasks import test_mail
+from modules.emails.tasks import send_offers
+from modules.scrapers.models import ScraperSession
 from modules.scrapers.services.custom_logger import CustomLogger
 
 
@@ -16,32 +18,35 @@ def fetch_apartment_details_task(logger: CustomLogger, _, apartment_id):
 
 
 @celery_task
-def valuate_task(__, _, result, apartment_id):
-    __.log_error("XD: " + str(result))
-    __.log_error("XD: " + str(apartment_id))
-
+def valuate_task(__, _, ___, apartment_id):
     apartment = Apartment.objects.get(id=apartment_id)
-    apartment.status = ApartmentStatus.DELETED
+    apartment.estimated_price = apartment.price + apartment.quantity * random()
     apartment.save()
 
 
 @celery_task
-def fetch_apartments_task(logger: CustomLogger, _, url: str, mails: list[str]):
+def fetch_apartments_task(logger: CustomLogger, _, session_id, url: str, mails: list[str]):
     from modules.scrapers.services.scraper import ScraperService
-
-    subtasks = ScraperService(logger).fetch_apartments(url, mails)
+    subtasks = ScraperService(logger).fetch_apartments(session_id, url, mails)
     return group(subtasks)()
 
 
 @celery_task
-def scraper_master_task(__, _, url: str, mails: list[str]):
-    fetch_apartments_task.s(url, mails).delay()
+def scraper_master_task(__, _, url: str, mails: list[str], treshold: float):
+    session = ScraperSession.objects.create(url=url, treshold=treshold)
+    fetch_apartments_task.s(session.id, url, mails).delay()
 
 
 @celery_task
-def handle_tasks_done(logger: CustomLogger, _, result, mails: list[str]):
+def handle_tasks_done(logger: CustomLogger, _, session_id, mails: list[str]):
     logger.log_info("All tasks are done!")
+    session = ScraperSession.objects.get(id=session_id)
+    logger.log_info(str(session.apartments))
+
+    special_offers = []
+    for apart in session.apartments.all():
+        if apart.is_special_offer(session.treshold):
+            special_offers.append(apart)
 
     for mail in mails:
-        test_mail.delay(mail)
-    return result
+        send_offers.delay(mail, special_offers)

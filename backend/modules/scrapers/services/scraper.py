@@ -6,6 +6,7 @@ from yarl import URL
 
 from modules.apartments.constants import ApartmentStatus
 from modules.apartments.models import Apartment, ApartmentDetails
+from modules.scrapers.models import ScraperSession
 from modules.scrapers.services.custom_logger import CustomLogger
 from modules.scrapers.services.scraper_listview import (
     NoMoreOffersException,
@@ -39,23 +40,25 @@ class ScraperService:
 
         return list(map(str, apart_details_data.items()))
 
-    def fetch_apartments(self, url: str, mails: list[str]):
+    def fetch_apartments(self, session_id, url: str, mails: list[str]):
+        session = ScraperSession.objects.get(id=session_id)
         url = URL(url)
         try:
             subtasks = []
             for apart_data in scrap_single_list_page(page=get_page(url)):
                 apartment = self._save_or_update(apart_data, "subpage", Apartment)
+                session.apartments.add(apartment)
                 subtasks.append(chain(
                     self._get_signature_details_task(apartment),
                     self._get_valuate_task(apartment),
                 )
                 )
-
-            subtasks.append(self._get_signature_next_page_task(url, mails))
+            session.save()
+            subtasks.append(self._get_signature_next_page_task(session_id, url, mails))
             return subtasks
         except NoMoreOffersException:
             self.logger.log_info(f"Stop: No more pages to iterate")
-            return [handle_tasks_done.s([], mails)]
+            return [handle_tasks_done.s(session_id, mails)]
 
     def _save_or_update(
             self, dict_data: dict, unique_key_name: str, ModelClass
@@ -80,9 +83,9 @@ class ScraperService:
             self.logger.log_error(f"Error processing {dict_data}: {e}")
 
     @staticmethod
-    def _get_signature_next_page_task(curr_url: URL, mails: list[str]):
+    def _get_signature_next_page_task(session_id, curr_url: URL, mails: list[str]):
         next_page_url = get_next_page_url(curr_url)
-        return fetch_apartments_task.s(str(next_page_url), mails)
+        return fetch_apartments_task.s(session_id, str(next_page_url), mails)
 
     @staticmethod
     def _get_signature_details_task(apartment: Apartment):
