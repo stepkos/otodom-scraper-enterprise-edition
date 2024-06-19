@@ -1,4 +1,4 @@
-from celery import group, chain
+from celery import chain, group
 
 from modules.apartments.models import Apartment
 from modules.core.utils import celery_task
@@ -26,9 +26,7 @@ def fetch_apartments_task(logger: CustomLogger, _, url: str):
 
 @celery_task
 def scraper_master_task(__, _, url: str):
-    chain(
-        fetch_apartments_task.s(url) | handle_tasks_done.s()
-    ).delay()
+    chain(fetch_apartments_task.s(url) | handle_tasks_done.s()).delay()
 
 
 @celery_task

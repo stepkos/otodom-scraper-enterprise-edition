@@ -8,9 +8,7 @@ logger = get_task_logger(__name__)
 
 
 @shared_task
-def send_offers(
-        receiver: str, offers: list[Apartment]
-) -> bool:
+def send_offers(receiver: str, offers: list[Apartment]) -> bool:
     logger.info("Sending email to receiver")
     is_success = EmailService().send_offers(receiver, offers)
     logger.info(f"Email success: {is_success}")

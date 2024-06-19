@@ -6,7 +6,7 @@ from typing import Sequence
 
 
 def create_message(
-        from_: str, to: str | Sequence[str], subject: str, body: str
+    from_: str, to: str | Sequence[str], subject: str, body: str
 ) -> EmailMessage:
     message = EmailMessage()
     message["From"] = from_
@@ -17,7 +17,7 @@ def create_message(
 
 
 def create_html_message(
-        from_: str, to: str | Sequence[str], subject: str, html_str: str
+    from_: str, to: str | Sequence[str], subject: str, html_str: str
 ) -> MIMEMultipart:
     message = MIMEMultipart("alternative")
     message["From"] = from_
@@ -29,7 +29,10 @@ def create_html_message(
 
 
 def send_email(
-        message: EmailMessage | MIMEMultipart, login: str, password: str, receiver: str | Sequence[str]
+    message: EmailMessage | MIMEMultipart,
+    login: str,
+    password: str,
+    receiver: str | Sequence[str],
 ) -> bool:
     try:
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:

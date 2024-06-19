@@ -1,14 +1,17 @@
 import requests
+from lxml import html
 from yarl import URL
 
 from modules.apartments.constants import ApartmentStatus
 from modules.apartments.models import Apartment, ApartmentDetails
 from modules.scrapers.services.custom_logger import CustomLogger
-from modules.scrapers.services.scraper_listview import scrap_single_list_page, NoMoreOffersException
+from modules.scrapers.services.scraper_listview import (
+    NoMoreOffersException,
+    scrap_single_list_page,
+)
 from modules.scrapers.services.scraper_subview import scrape_apartment_details
 from modules.scrapers.tasks import fetch_apartment_details_task, fetch_apartments_task
 from modules.scrapers.utils import get_next_page_url, get_page
-from lxml import html
 
 
 class ScraperService:
@@ -19,7 +22,9 @@ class ScraperService:
         apart_details_data = {}
         try:
             url = apartment.get_abs_details_url()
-            apart_details_data = scrape_apartment_details(html.fromstring(get_page(URL(url))))
+            apart_details_data = scrape_apartment_details(
+                html.fromstring(get_page(URL(url)))
+            )
             apart_details_data["apartment_id"] = apartment.id
             self._save_or_update(apart_details_data, "apartment_id", ApartmentDetails)
 
@@ -46,15 +51,15 @@ class ScraperService:
             self.logger.log_info(f"Stop: No more pages to iterate")
             return None
 
-    def _save_or_update(self, dict_data: dict, unique_key_name: str, ModelClass) -> Apartment | None:
+    def _save_or_update(
+        self, dict_data: dict, unique_key_name: str, ModelClass
+    ) -> Apartment | None:
         # try:
         apartment, created = ModelClass.objects.update_or_create(
             # TODO: check if this works as it should, cause I've struggled a bit
             **{unique_key_name: dict_data[unique_key_name]},
             defaults={
-                key: value
-                for key, value in dict_data.items()
-                if key != unique_key_name
+                key: value for key, value in dict_data.items() if key != unique_key_name
             },
         )
         if not created:
@@ -69,12 +74,8 @@ class ScraperService:
     @staticmethod
     def _get_signature_next_page_task(curr_url: URL):
         next_page_url = get_next_page_url(curr_url)
-        return fetch_apartments_task.s(
-            str(next_page_url)
-        )
+        return fetch_apartments_task.s(str(next_page_url))
 
     @staticmethod
     def _get_signature_details_task(apartment: Apartment):
-        return fetch_apartment_details_task.s(
-            apartment.id
-        )
+        return fetch_apartment_details_task.s(apartment.id)

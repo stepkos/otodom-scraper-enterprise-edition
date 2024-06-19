@@ -23,9 +23,15 @@ def celery_task(func):
         logs = logger_res.pop("logs", False)
         errors = logger_res.pop("errors", False)
 
-        CeleryResult.objects.create(task_id=task_id, task_name=task_name, arguments=[list(map(str, args[1::])), kwargs],
-                                    result=result if is_json_serializable(result) else None,
-                                    is_success=is_success, logs=logs, errors=errors)
+        CeleryResult.objects.create(
+            task_id=task_id,
+            task_name=task_name,
+            arguments=[list(map(str, args[1::])), kwargs],
+            result=result if is_json_serializable(result) else None,
+            is_success=is_success,
+            logs=logs,
+            errors=errors,
+        )
         return result
 
     return wrapper
