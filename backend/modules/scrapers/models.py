@@ -14,3 +14,4 @@ class ScraperSession(BaseModel):
         blank=True,
         null=True,
     )
+    artificial_page_stop = models.IntegerField(null=True, blank=True)

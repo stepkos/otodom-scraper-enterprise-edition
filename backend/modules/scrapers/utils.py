@@ -4,19 +4,23 @@ import requests
 from yarl import URL
 
 from modules.scrapers.constants.for_scraper_v2 import HTTP_HEADERS
+from modules.scrapers.services.scraper_listview import NoMoreOffersException
 
 
 def get_next_page_url(
-    url: URL, param_name: str = "page", start: int = 1, step: int = 1
+        url: URL, param_name: str = "page", start: int = 1, step: int = 1, end=None
 ) -> URL:
     current_page = start
     if param_name in url.query:
         current_page = int(url.query[param_name])
+
+    if end is not None and current_page > end:
+        raise NoMoreOffersException("Artificial limit met")
     return url.update_query({param_name: current_page + step})
 
 
 def url_paginator(
-    url: URL, param_name: str = "page", start: int = 1, end: int | None = None
+        url: URL, param_name: str = "page", start: int = 1, end: int | None = None
 ) -> Iterator[URL]:
     i = start
     if end is not None:
@@ -38,7 +42,7 @@ def get_page(url: URL) -> str | None:
 
 
 def pages_iterator(
-    url: URL, param_name: str = "page", start: int = 1, end: int | None = None
+        url: URL, param_name: str = "page", start: int = 1, end: int | None = None
 ) -> Iterator[str | None]:
     for url in url_paginator(url, param_name, start, end):
         yield get_page(url)

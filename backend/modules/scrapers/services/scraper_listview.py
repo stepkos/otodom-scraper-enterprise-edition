@@ -35,7 +35,7 @@ def spec_list_apartments_iterator(page: html.HtmlElement) -> Iterator[dict]:
 
 def scrap_single_list_page(page: str) -> Iterator[dict]:
     tree = html.fromstring(page)
-    if tree.xpath(LISTVIEW_XPATHS["offers-not-found"]) or random() > 0.7:
+    if tree.xpath(LISTVIEW_XPATHS["offers-not-found"]):
         raise NoMoreOffersException("No more offers")
     yield from spec_list_apartments_iterator(tree)
 

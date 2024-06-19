@@ -59,7 +59,7 @@ class ScraperService:
                         self._get_valuate_task(apartment),
                     )
                 )
-            subtasks.append(self._get_signature_next_page_task(session_id, url, mails))
+            subtasks.append(self._get_signature_next_page_task(session, url, mails))
             return subtasks
         except NoMoreOffersException:
             self.logger.log_info(f"Stop: No more pages to iterate")
@@ -88,9 +88,9 @@ class ScraperService:
             self.logger.log_error(f"Error processing {dict_data}: {e}")
 
     @staticmethod
-    def _get_signature_next_page_task(session_id, curr_url: URL, mails: list[str]):
-        next_page_url = get_next_page_url(curr_url)
-        return fetch_apartments_task.s(session_id, str(next_page_url), mails)
+    def _get_signature_next_page_task(session, curr_url: URL, mails: list[str]):
+        next_page_url = get_next_page_url(curr_url, end=session.artificial_page_stop)
+        return fetch_apartments_task.s(session.id, str(next_page_url), mails)
 
     @staticmethod
     def _get_signature_details_task(apartment: Apartment):

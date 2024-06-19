@@ -39,8 +39,8 @@ def fetch_apartments_task(
 
 
 @celery_task
-def scraper_master_task(__, _, url: str, mails: list[str], treshold: float):
-    session = ScraperSession.objects.create(url=url, treshold=treshold)
+def scraper_master_task(__, _, url: str, mails: list[str], treshold: float, artificial_page_stop: int | None = None):
+    session = ScraperSession.objects.create(url=url, treshold=treshold, artificial_page_stop=artificial_page_stop)
     fetch_apartments_task.s(session.id, url, mails).delay()
 
 
