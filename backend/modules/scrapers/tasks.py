@@ -3,7 +3,7 @@ from decimal import Decimal
 from celery import group
 
 from modules.apartments.constants import ApartmentStatus
-from modules.apartments.models import Apartment
+from modules.apartments.models import Apartment, ApartmentDetails
 from modules.core.utils import celery_task
 from modules.emails.tasks import send_offers
 from modules.scrapers.models import ScraperSession
@@ -22,13 +22,17 @@ def fetch_apartment_details_task(logger: CustomLogger, _, apartment_id):
 @celery_task
 def valuate_task(logger, _, ___, apartment_id):
     apartment = Apartment.objects.get(id=apartment_id)
-    if apartment.details is not None and (est_price := predict_with_scalers_from_apartment(apartment)):
-        apartment.estimated_price = Decimal(str(est_price * float(apartment.area)))
-        logger.log_info(f"Estimated market price: {est_price}")
-        apartment.status = ApartmentStatus.VALUATED
-        apartment.save()
-    else:
-        logger.log_error(f"Could not estimate for this apartment: {apartment_id}, details: {apartment.details.id}")
+    try:
+        if est_price := predict_with_scalers_from_apartment(apartment):
+
+            apartment.estimated_price = Decimal(str(est_price * float(apartment.area)))
+            logger.log_info(f"Estimated market price: {est_price}")
+            apartment.status = ApartmentStatus.VALUATED
+            apartment.save()
+        else:
+            logger.log_error(f"Could not estimate for this apartment: {apartment_id}, details: {apartment.details.id}")
+    except ApartmentDetails.DoesNotExist:
+        logger.log_error(f"No deatail for: {apartment_id}, status: {apartment.status}")
 
 
 @celery_task
