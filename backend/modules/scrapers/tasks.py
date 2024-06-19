@@ -1,11 +1,8 @@
-from itertools import chain
-from random import random
-
-from celery import chord, group
+from celery import group
 
 from modules.apartments.constants import ApartmentStatus
 from modules.apartments.models import Apartment
-from modules.core.utils import celery_task, flatten
+from modules.core.utils import celery_task
 from modules.emails.tasks import test_mail
 from modules.scrapers.services.custom_logger import CustomLogger
 
