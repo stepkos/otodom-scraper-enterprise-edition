@@ -1,6 +1,8 @@
+import itertools
 import json
 from functools import wraps
 
+from celery import chain
 from celery.result import GroupResult
 
 from config import celery_app
@@ -27,7 +29,11 @@ def celery_task(func):
             task_id=task_id,
             task_name=task_name,
             arguments=[list(map(str, args[1::])), kwargs],
-            result=result if is_json_serializable(result) else None,
+            result=(
+                result
+                if is_json_serializable(result) and not isinstance(result, chain)
+                else None
+            ),
             is_success=is_success,
             logs=logs,
             errors=errors,
@@ -43,3 +49,10 @@ def is_json_serializable(obj):
         return True
     except TypeError:
         return False
+
+
+def flatten(nested_list):
+    if isinstance(nested_list, list):
+        return list(itertools.chain.from_iterable(map(flatten, nested_list)))
+    else:
+        return [nested_list]

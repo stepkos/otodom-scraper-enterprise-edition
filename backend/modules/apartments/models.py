@@ -4,7 +4,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from yarl import URL
 
-from modules.apartments.constants import ApartmentStatus, FloorChoice, MarketChoice, FinishingConditionChoice
+from modules.apartments.constants import (
+    ApartmentStatus,
+    FinishingConditionChoice,
+    FloorChoice,
+    MarketChoice,
+)
 from modules.core.models import BaseModel
 
 
@@ -44,6 +49,13 @@ class Apartment(BaseModel):
     lastly_scraped_at = (
         models.DateTimeField(auto_now_add=True, blank=True, null=True),
     )
+    estimated_price = models.DecimalField(
+        verbose_name=_("Estimated Price"),
+        max_digits=10,
+        decimal_places=0,
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         verbose_name = _("Apartment")
@@ -60,6 +72,17 @@ class Apartment(BaseModel):
         if self.price and self.area:
             return float(self.price) / float(self.area)
         return None
+
+    @property
+    def below_market_price(self) -> float | None:
+        if self.price and self.estimated_price:
+            return self.estimated_price - self.price
+        return None
+
+    def is_special_offer(self, treshold: float) -> bool:
+        if self.below_market_price and treshold:
+            return self.below_market_price > treshold
+        return False
 
     # @property
     # def predicted_price(self) -> float | None:
@@ -100,7 +123,11 @@ class ApartmentDetails(BaseModel):
         verbose_name=_("Form Of The Property"), max_length=64, blank=True, null=True
     )
     finishing_condition = models.CharField(
-        verbose_name=_("Finishing Condition"), max_length=64, choices=FinishingConditionChoice.choices, blank=True, null=True
+        verbose_name=_("Finishing Condition"),
+        max_length=64,
+        choices=FinishingConditionChoice.choices,
+        blank=True,
+        null=True,
     )
     balcony_garden_terrace = models.CharField(
         verbose_name=_("Balcony Garden"), max_length=64, blank=True, null=True
@@ -115,7 +142,11 @@ class ApartmentDetails(BaseModel):
         verbose_name=_("Full Description"), blank=True, null=True
     )
     market = models.CharField(
-        verbose_name=_("Market"), max_length=64, choices=MarketChoice.choices, blank=True, null=True
+        verbose_name=_("Market"),
+        max_length=64,
+        choices=MarketChoice.choices,
+        blank=True,
+        null=True,
     )
     advertisement_type = models.CharField(
         verbose_name=_("Advertisement Type"), max_length=128, blank=True, null=True
