@@ -1,14 +1,20 @@
 # pull official base image
-FROM python:3.12.3-alpine
+FROM python:3.11-slim
 
-RUN apk update && apk add python3-dev gcc libc-dev
+RUN apt-get update && apt-get install -y \
+  python3-dev \
+  gcc \
+  libc-dev \
+  && rm -rf /var/lib/apt/lists/*
+
+# RUN apk update && apk add python3-dev gcc libc-dev
 
 WORKDIR /app
 
 RUN pip install --upgrade pip
 RUN pip install gunicorn
 ADD ./backend/requirements.txt /app/
-RUN pip install -r requirements.txt
+RUN pip install -r /app/requirements.txt
 
 ADD ./backend /app/backend
 ADD ./docker /app/docker
