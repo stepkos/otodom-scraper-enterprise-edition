@@ -3,7 +3,7 @@ from typing import Iterable, Iterator
 import requests
 from yarl import URL
 
-from modules.scrapers.constants.for_scraper import HTTP_HEADERS
+from modules.scrapers.constants.for_scraper_v2 import HTTP_HEADERS
 
 
 def get_next_page_url(

@@ -5,7 +5,7 @@ from typing import Iterator
 from lxml import html
 
 from modules.apartments.models import ApartmentStatus
-from modules.scrapers.constants.for_scraper import LISTVIEW_XPATHS
+from modules.scrapers.constants.for_scraper_v2 import LISTVIEW_XPATHS
 from modules.scrapers.constants.parsing_rules import FIELD_MAP
 from modules.scrapers.services.parsing_processors import parse_single_attr
 

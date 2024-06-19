@@ -97,19 +97,6 @@ class ExtractText(ValueProcessor[HtmlElement, str]):
         return raw_value.text_content()
 
 
-# s
-
-
-# class ExtractAndSkipIfIn(Multi[HtmlElement, str | None]):
-#     def __init__(self, keywords_to_skip: list[str]):
-#         super().__init__(
-#             [
-#                 ExtractText(),
-#                 SkipIfIn(keywords_to_skip),
-#             ]
-#         )
-
-
 ProcessorDict = dict[str, ValueProcessor]
 
 
@@ -121,5 +108,9 @@ def parse_single_attr(
 ):
     if text := elem.xpath(xpaths_dict[attr_name]):
         val = parse_dict[attr_name].process_value(text[0])
-        return val
+        if (
+            "brak informacji" not in str(val).lower()
+            and "zapytaj" not in str(val).lower()
+        ):
+            return val
     return None
