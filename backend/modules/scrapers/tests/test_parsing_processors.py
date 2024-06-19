@@ -1,7 +1,18 @@
 from django.test import TestCase
 from lxml.html import fromstring
-from modules.scrapers.services.parsing_processors import Stripper, SplitAndTake, Caster, TryCaster, \
-    Multi, KeyGet, Replace, SpecialCases, ExtractText, parse_single_attr
+
+from modules.scrapers.services.parsing_processors import (
+    Caster,
+    ExtractText,
+    KeyGet,
+    Multi,
+    Replace,
+    SpecialCases,
+    SplitAndTake,
+    Stripper,
+    TryCaster,
+    parse_single_attr,
+)
 
 
 class TestValueProcessors(TestCase):
@@ -27,7 +38,12 @@ class TestValueProcessors(TestCase):
         self.assertIsNone(processor.process_value("abc"))
 
     def test_multi(self):
-        processor = Multi(processors=[Stripper(keyword=" "), Replace(to_be_repl="hello", replace_to="hi")])
+        processor = Multi(
+            processors=[
+                Stripper(keyword=" "),
+                Replace(to_be_repl="hello", replace_to="hi"),
+            ]
+        )
         self.assertEqual(processor.process_value("  hello world  "), "hi world")
 
     def test_key_get(self):
@@ -41,7 +57,9 @@ class TestValueProcessors(TestCase):
 
     def test_special_cases(self):
         default_processor = Stripper(keyword="a")
-        special_cases = SpecialCases(map_dict={"special": "case"}, default_processor=default_processor)
+        special_cases = SpecialCases(
+            map_dict={"special": "case"}, default_processor=default_processor
+        )
         self.assertEqual(special_cases.process_value("special"), "case")
         self.assertEqual(special_cases.process_value("apple"), "pple")
 
@@ -53,10 +71,10 @@ class TestValueProcessors(TestCase):
     def test_parse_single_attr(self):
         xpaths_dict = {"attr": "//div/text()"}
         parse_dict = {"attr": Stripper(keyword=" ")}
-        html = fromstring('<div>  some text  </div>')
+        html = fromstring("<div>  some text  </div>")
         result = parse_single_attr(xpaths_dict, parse_dict, html, "attr")
         self.assertEqual(result, "some text")
 
-        html_empty = fromstring('<div></div>')
+        html_empty = fromstring("<div></div>")
         result_empty = parse_single_attr(xpaths_dict, parse_dict, html_empty, "attr")
         self.assertIsNone(result_empty)

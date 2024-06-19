@@ -2,6 +2,7 @@ import csv
 from pathlib import Path
 
 from django.core.management.base import BaseCommand
+
 from modules.apartments.models import ApartmentDetails
 
 
@@ -37,19 +38,18 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "-f", "--filename",
+            "-f",
+            "--filename",
             type=str,
             required=True,
-            help="The name of the output CSV file"
+            help="The name of the output CSV file",
         )
 
     def handle(self, *args, **options):
         details = ApartmentDetails.objects.all()
         export_file = self.EXPORT_BASE_PATH / options["filename"]
         with export_file.open("w", encoding="utf-8") as file:
-            writer = csv.DictWriter(
-                file, fieldnames=self.ALL_HEADERS, delimiter=";"
-            )
+            writer = csv.DictWriter(file, fieldnames=self.ALL_HEADERS, delimiter=";")
             writer.writeheader()
 
             counter = 0
@@ -80,6 +80,4 @@ class Command(BaseCommand):
                     }
                 )
 
-            self.stdout.write(
-                self.style.SUCCESS(f"Exported {counter} apartments.")
-            )
+            self.stdout.write(self.style.SUCCESS(f"Exported {counter} apartments."))
