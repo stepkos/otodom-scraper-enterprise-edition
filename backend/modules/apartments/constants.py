@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 class ApartmentStatus(models.TextChoices):
     WAITING_FOR_DETAILS = "WAITING_FOR_DETAILS", _("Awaiting details")
     SYNCHRONIZED = "SYNCHRONIZED", _("Synchronized")
+    VALUATED = "VALUATED", _("VALUATED")
     DELETED = "DELETED", _("deleted")
 
 

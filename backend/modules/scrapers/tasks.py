@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from celery import group
 
+from modules.apartments.constants import ApartmentStatus
 from modules.apartments.models import Apartment
 from modules.core.utils import celery_task
 from modules.emails.tasks import send_offers
@@ -23,6 +24,7 @@ def valuate_task(__, _, ___, apartment_id):
     apartment = Apartment.objects.get(id=apartment_id)
     if apartment.price and (est_price := predict_with_scalers_from_apartment(apartment)):
         apartment.estimated_price = Decimal(str(est_price))
+        apartment.status = ApartmentStatus.VALUATED
         apartment.save()
 
 
