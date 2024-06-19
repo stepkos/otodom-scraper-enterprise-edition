@@ -76,7 +76,7 @@ class Apartment(BaseModel):
     @property
     def below_market_price(self) -> float | None:
         if self.price and self.estimated_price:
-            return self.estimated_price - self.price
+            return float(self.estimated_price) - float(self.price)
         return None
 
     def is_special_offer(self, treshold: float) -> bool:

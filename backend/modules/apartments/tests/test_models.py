@@ -19,14 +19,15 @@ class ApartmentModelTests(TestCase):
             rooms=3,
             area=Decimal("100.00"),
             floor=FloorChoice.GROUND_FLOOR,
-            status=ApartmentStatus.WAITING_FOR_DETAILS,
+            status=ApartmentStatus.VALUATED,
             estimated_price=Decimal("550000")
         )
 
     def test_apartment_creation(self):
         self.assertEqual(self.apartment.title, "Test Apartment")
         self.assertEqual(self.apartment.price, Decimal("500000"))
-        self.assertEqual(self.apartment.status, ApartmentStatus.WAITING_FOR_DETAILS)
+        self.assertEqual(self.apartment.estimated_price, Decimal("550000"))
+        self.assertEqual(self.apartment.status, ApartmentStatus.VALUATED)
 
     def test_address_estate(self):
         self.assertEqual(self.apartment.address_estate, "StareMiasto")
@@ -35,6 +36,7 @@ class ApartmentModelTests(TestCase):
         self.assertEqual(self.apartment.price_per_m2, 5000.00)
 
     def test_below_market_price(self):
+        self.assertEqual((float(self.apartment.estimated_price) - float(self.apartment.price)), 50000)
         self.assertEqual(self.apartment.below_market_price, 50000)
 
     def test_is_special_offer(self):
