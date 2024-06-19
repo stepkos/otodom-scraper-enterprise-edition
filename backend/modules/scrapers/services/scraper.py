@@ -10,13 +10,14 @@ from modules.scrapers.services.scraper_listview import (
     scrap_single_list_page,
 )
 from modules.scrapers.services.scraper_subview import scrape_apartment_details
-from modules.scrapers.tasks import fetch_apartment_details_task, fetch_apartments_task
+from modules.scrapers.tasks import fetch_apartment_details_task, fetch_apartments_task, handle_tasks_done
 from modules.scrapers.utils import get_next_page_url, get_page
 
 
 class ScraperService:
-    def __init__(self, logger: CustomLogger):
+    def __init__(self, logger: CustomLogger, mails: list[str]):
         self.logger = logger
+        self.mails = mails
 
     def fetch_apartment_details(self, apartment: Apartment):
         apart_details_data = {}
@@ -49,10 +50,10 @@ class ScraperService:
             return subtasks
         except NoMoreOffersException:
             self.logger.log_info(f"Stop: No more pages to iterate")
-            return None
+            return [handle_tasks_done.s([], self.mails)]
 
     def _save_or_update(
-        self, dict_data: dict, unique_key_name: str, ModelClass
+            self, dict_data: dict, unique_key_name: str, ModelClass
     ) -> Apartment | None:
         try:
             apartment, created = ModelClass.objects.update_or_create(
@@ -73,11 +74,9 @@ class ScraperService:
         except Exception as e:
             self.logger.log_error(f"Error processing {dict_data}: {e}")
 
-    @staticmethod
-    def _get_signature_next_page_task(curr_url: URL):
+    def _get_signature_next_page_task(self, curr_url: URL):
         next_page_url = get_next_page_url(curr_url)
-        return fetch_apartments_task.s(str(next_page_url))
+        return fetch_apartments_task.s(str(next_page_url), self.mails)
 
-    @staticmethod
-    def _get_signature_details_task(apartment: Apartment):
-        return fetch_apartment_details_task.s(apartment.id)
+    def _get_signature_details_task(self, apartment: Apartment):
+        return fetch_apartment_details_task.s(apartment.id, self.mails)
