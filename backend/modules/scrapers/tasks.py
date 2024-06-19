@@ -21,7 +21,7 @@ def fetch_apartments_task(logger: CustomLogger, _, url: str):
     from modules.scrapers.services.scraper import ScraperService
 
     subtasks = ScraperService(logger).fetch_apartments(url)
-    return group(subtasks) if subtasks else None
+    return group(subtasks)() if subtasks else None
 
 
 @celery_task
