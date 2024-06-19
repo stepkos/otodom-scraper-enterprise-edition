@@ -1,3 +1,4 @@
+from config.settings import EMAIL_CTA_URL
 from modules.apartments.models import Apartment
 
 
@@ -87,7 +88,7 @@ def get_message_template(offers: list[Apartment]):
                     </tbody>
                 </table>
                 <p>Don't miss out! Click below to explore these amazing apartments:</p>
-                <a href="{offers[0].subpage}" class="cta-button">Explore Apartments</a>
+                <a href="{EMAIL_CTA_URL}" class="cta-button">Explore Apartments</a>
             </div>
         </body>
         </html>

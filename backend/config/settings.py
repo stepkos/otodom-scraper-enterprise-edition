@@ -170,3 +170,4 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # Email settings
 EMAIL_USER = os.environ.get("EMAIL_USER")
 EMAIL_APP_CLIENT_ACCESS_CODE = os.environ.get("EMAIL_APP_CLIENT_ACCESS_CODE")
+EMAIL_CTA_URL = "http://127.0.0.1/admin/apartments/apartment/"
