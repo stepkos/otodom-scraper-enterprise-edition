@@ -1,8 +1,10 @@
+from contextlib import suppress
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from yarl import URL
 
-from modules.apartments.constants import ApartmentStatus, FloorChoice
+from modules.apartments.constants import ApartmentStatus, FloorChoice, MarketChoice, FinishingConditionChoice
 from modules.core.models import BaseModel
 
 
@@ -31,7 +33,6 @@ class Apartment(BaseModel):
         blank=True,
         null=True,
     )  # floor dodałem rowniez w details poniewaz tutaj jest tylko do 10+
-
     status = models.CharField(
         verbose_name=_("Status"),
         max_length=20,
@@ -48,11 +49,17 @@ class Apartment(BaseModel):
         verbose_name = _("Apartment")
         verbose_name_plural = _("Apartments")
 
-    # @property
-    # def price_per_m2(self) -> Decimal | None:
-    #     if self.price and self.area:
-    #         return self.price / self.area
-    #     return None
+    @property
+    def address_estate(self) -> str | None:
+        with suppress(IndexError):
+            return str(self.address).replace(" ", "").split(",")[-3]
+        return None
+
+    @property
+    def price_per_m2(self) -> float | None:
+        if self.price and self.area:
+            return float(self.price) / float(self.area)
+        return None
 
     def __str__(self):
         return f"Apartment(title={self.title[:20]}, price={self.price})"
@@ -89,7 +96,7 @@ class ApartmentDetails(BaseModel):
         verbose_name=_("Form Of The Property"), max_length=64, blank=True, null=True
     )
     finishing_condition = models.CharField(
-        verbose_name=_("Finishing Condition"), max_length=64, blank=True, null=True
+        verbose_name=_("Finishing Condition"), max_length=64, choices=FinishingConditionChoice.choices, blank=True, null=True
     )
     balcony_garden_terrace = models.CharField(
         verbose_name=_("Balcony Garden"), max_length=64, blank=True, null=True
@@ -104,7 +111,7 @@ class ApartmentDetails(BaseModel):
         verbose_name=_("Full Description"), blank=True, null=True
     )
     market = models.CharField(
-        verbose_name=_("Market"), max_length=64, blank=True, null=True
+        verbose_name=_("Market"), max_length=64, choices=MarketChoice.choices, blank=True, null=True
     )
     advertisement_type = models.CharField(
         verbose_name=_("Advertisement Type"), max_length=128, blank=True, null=True
