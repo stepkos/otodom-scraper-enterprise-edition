@@ -15,3 +15,6 @@ pip-freeze:
 
 bash:
 	docker-compose exec server bash
+
+test:
+	docker-compose exec server python3 backend/manage.py test
