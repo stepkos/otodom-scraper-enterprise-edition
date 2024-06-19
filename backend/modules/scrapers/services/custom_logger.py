@@ -1,5 +1,10 @@
+from celery.utils.log import get_task_logger
+
+celery_logger = get_task_logger(__name__)
+
+
 class CustomLogger:
-    def __init__(self, logger):
+    def __init__(self, logger=celery_logger):
         self._logger = logger
         self.success = True
         self.errors = []

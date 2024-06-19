@@ -1,4 +1,5 @@
 from functools import partial
+from random import random
 from typing import Iterator
 
 from lxml import html
@@ -34,6 +35,11 @@ def spec_list_apartments_iterator(page: html.HtmlElement) -> Iterator[dict]:
 
 def scrap_single_list_page(page: str) -> Iterator[dict]:
     tree = html.fromstring(page)
-    if tree.xpath(LISTVIEW_XPATHS["offers-not-found"]):
-        raise StopIteration()
+    if tree.xpath(LISTVIEW_XPATHS["offers-not-found"]) or random() > 0.8:
+        raise NoMoreOffersException("No more offers")
     yield from spec_list_apartments_iterator(tree)
+
+
+class NoMoreOffersException(Exception):
+    def __init__(self, message):
+        super().__init__(message)

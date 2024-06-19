@@ -1,7 +1,7 @@
 from celery import shared_task
 from celery.utils.log import get_task_logger
 
-from modules.apartments.models import Apartment, ApartmentDetails
+from modules.apartments.models import Apartment
 from modules.emails.services import EmailService
 
 logger = get_task_logger(__name__)
@@ -9,7 +9,7 @@ logger = get_task_logger(__name__)
 
 @shared_task
 def send_offers(
-    receiver: str, offers: list[tuple[Apartment, ApartmentDetails]]
+    receiver: str, offers: list[Apartment]
 ) -> bool:
     logger.info("Sending email to receiver")
     is_success = EmailService().send_offers(receiver, offers)

@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     "modules.core",
     "modules.emails",
     "modules.scrapers",
-    "modules.valuations",
+    # "modules.valuations",
 ]
 
 MIDDLEWARE = [
@@ -69,6 +69,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
 ROOT_URLCONF = "config.urls"
 
