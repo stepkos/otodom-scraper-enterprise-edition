@@ -48,12 +48,12 @@ class ScraperService:
             for apart_data in scrap_single_list_page(page=get_page(url)):
                 apartment = self._save_or_update(apart_data, "subpage", Apartment)
                 session.apartments.add(apartment)
+                session.save()
                 subtasks.append(chain(
                     self._get_signature_details_task(apartment),
                     self._get_valuate_task(apartment),
                 )
                 )
-            session.save()
             subtasks.append(self._get_signature_next_page_task(session_id, url, mails))
             return subtasks
         except NoMoreOffersException:

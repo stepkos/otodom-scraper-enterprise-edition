@@ -4,7 +4,8 @@ from modules.emails.services import EmailService
 
 
 @celery_task
-def send_offers(logger, _, receiver: str, offers: list[Apartment]) -> bool:
+def send_offers(logger, _, receiver: str, offers_id: list) -> bool:
+    offers = Apartment.objects.filter(id__in=offers_id)
     logger.log_info("Sending email to receiver")
     is_success = EmailService().send_offers(receiver, offers)
     logger.log_info(f"Email success: {is_success}")
