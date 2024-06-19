@@ -7,11 +7,11 @@ def get_single_offer_template(apart: Apartment):
         <tr>
             <td><strong>{apart.title}</strong></td>
             <td>Price: {apart.price}</td>
+            <td>Est. price: {apart.estimated_price}</td>
             <td>Address: {apart.address}</td>
             <td>Rooms: {apart.rooms}</td>
             <td>Area: {apart.area} m²</td>
             <td>Floor: {apart.floor}</td>
-            <td>Status: {apart.status}</td>
             <td><a href="{apart.get_abs_details_url()}">Link</a></td>
         </tr>
     """
@@ -75,11 +75,11 @@ def get_message_template(offers: list[Apartment]):
                         <tr>
                             <th>Title</th>
                             <th>Price</th>
+                            <th>Cena rynkowa</th>
                             <th>Address</th>
                             <th>Rooms</th>
                             <th>Area</th>
                             <th>Floor</th>
-                            <th>Status</th>
                             <th>Link</th>
                         </tr>
                     </thead>
