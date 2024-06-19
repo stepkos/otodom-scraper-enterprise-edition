@@ -1,5 +1,6 @@
 from django.test import TestCase
-from modules.core.utils import is_json_serializable, flatten
+
+from modules.core.utils import flatten, is_json_serializable
 
 
 class TestCeleryTaskDecorator(TestCase):

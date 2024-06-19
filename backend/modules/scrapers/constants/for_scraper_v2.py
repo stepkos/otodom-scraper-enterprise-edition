@@ -54,5 +54,5 @@ SUBVIEW_XPATHS = {
     "windows": _subview_extra_table_xpath("Okna"),
     "is_elevator": _subview_extra_table_xpath("Winda"),
     "exact_floors": _subview_datatable_xpath("Piętro"),
-    "exact_rooms": "//button[.//div[contains(text(), 'pokoje')]]/div[2]'",
+    "exact_rooms": "//button[.//div[contains(text(), 'pokoje')]]/div[2]",
 }

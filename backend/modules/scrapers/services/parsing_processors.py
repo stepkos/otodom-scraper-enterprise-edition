@@ -107,10 +107,13 @@ def parse_single_attr(
     attr_name: str,
 ):
     if text := elem.xpath(xpaths_dict[attr_name]):
-        val = parse_dict[attr_name].process_value(text[0])
-        if (
-            "brak informacji" not in str(val).lower()
-            and "zapytaj" not in str(val).lower()
-        ):
+        try:
+            val = parse_dict[attr_name].process_value(text[0])
+            # if (
+            #     "brak informacji" not in str(val).lower()
+            #     and "zapytaj" not in str(val).lower()
+            # ):
             return val
-    return None
+        except Exception as e:
+            return None
+    # return None

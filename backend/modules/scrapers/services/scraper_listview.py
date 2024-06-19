@@ -1,5 +1,4 @@
 from functools import partial
-from random import random
 from typing import Iterator
 
 from lxml import html

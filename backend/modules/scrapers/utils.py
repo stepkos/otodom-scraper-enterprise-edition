@@ -8,7 +8,7 @@ from modules.scrapers.services.scraper_listview import NoMoreOffersException
 
 
 def get_next_page_url(
-        url: URL, param_name: str = "page", start: int = 1, step: int = 1, end=None
+    url: URL, param_name: str = "page", start: int = 1, step: int = 1, end=None
 ) -> URL:
     current_page = start
     if param_name in url.query:
@@ -20,7 +20,7 @@ def get_next_page_url(
 
 
 def url_paginator(
-        url: URL, param_name: str = "page", start: int = 1, end: int | None = None
+    url: URL, param_name: str = "page", start: int = 1, end: int | None = None
 ) -> Iterator[URL]:
     i = start
     if end is not None:
@@ -42,7 +42,7 @@ def get_page(url: URL) -> str | None:
 
 
 def pages_iterator(
-        url: URL, param_name: str = "page", start: int = 1, end: int | None = None
+    url: URL, param_name: str = "page", start: int = 1, end: int | None = None
 ) -> Iterator[str | None]:
     for url in url_paginator(url, param_name, start, end):
         yield get_page(url)
