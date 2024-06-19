@@ -2,7 +2,7 @@ from functools import partial
 
 from lxml import html
 
-from modules.scrapers.constants.for_scraper import SUBVIEW_XPATHS
+from modules.scrapers.constants.for_scraper_v2 import SUBVIEW_XPATHS
 from modules.scrapers.constants.parsing_rules import SUBPAGES_FIELD_MAP
 from modules.scrapers.services.scraper_listview import parse_single_attr
 
@@ -33,6 +33,5 @@ def scrape_apartment_details(page: html.HtmlElement) -> dict:
 #         page = get_page(url)
 #         if page:
 #             yield scrape_apartment_details(html.fromstring(page))
-#         # TODO: Dodac obsluge bledow, nie tylko tutaj
 #         # Imo chyba już z requesta rzucajmy wyjatkami
 #         # obsluzy sie je w wyzszej warstwie

@@ -5,7 +5,7 @@ from typing import Iterator
 from lxml import html
 
 from modules.apartments.models import ApartmentStatus
-from modules.scrapers.constants.for_scraper import LISTVIEW_XPATHS
+from modules.scrapers.constants.for_scraper_v2 import LISTVIEW_XPATHS
 from modules.scrapers.constants.parsing_rules import FIELD_MAP
 from modules.scrapers.services.parsing_processors import parse_single_attr
 
@@ -35,7 +35,7 @@ def spec_list_apartments_iterator(page: html.HtmlElement) -> Iterator[dict]:
 
 def scrap_single_list_page(page: str) -> Iterator[dict]:
     tree = html.fromstring(page)
-    if tree.xpath(LISTVIEW_XPATHS["offers-not-found"]) or random() > 0.8:
+    if tree.xpath(LISTVIEW_XPATHS["offers-not-found"]):
         raise NoMoreOffersException("No more offers")
     yield from spec_list_apartments_iterator(tree)
 
