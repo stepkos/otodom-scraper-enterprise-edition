@@ -22,13 +22,18 @@ def fetch_apartment_details_task(logger: CustomLogger, _, apartment_id):
 def valuate_task(__, _, ___, apartment_id):
     apartment = Apartment.objects.get(id=apartment_id)
     if apartment.price:
-        apartment.estimated_price = apartment.price + apartment.price * Decimal(str(random()))
+        apartment.estimated_price = apartment.price + apartment.price * Decimal(
+            str(random())
+        )
         apartment.save()
 
 
 @celery_task
-def fetch_apartments_task(logger: CustomLogger, _, session_id, url: str, mails: list[str]):
+def fetch_apartments_task(
+    logger: CustomLogger, _, session_id, url: str, mails: list[str]
+):
     from modules.scrapers.services.scraper import ScraperService
+
     subtasks = ScraperService(logger).fetch_apartments(session_id, url, mails)
     return group(subtasks)()
 

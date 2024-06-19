@@ -29,7 +29,11 @@ def celery_task(func):
             task_id=task_id,
             task_name=task_name,
             arguments=[list(map(str, args[1::])), kwargs],
-            result=result if is_json_serializable(result) and not isinstance(result, chain) else None,
+            result=(
+                result
+                if is_json_serializable(result) and not isinstance(result, chain)
+                else None
+            ),
             is_success=is_success,
             logs=logs,
             errors=errors,

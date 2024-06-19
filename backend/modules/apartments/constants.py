@@ -34,4 +34,3 @@ class FinishingConditionChoice(models.TextChoices):
 class MarketChoice(models.TextChoices):
     PRIMARY = "pierwotny", _("Primary")
     SECONDARY = "wtórny", _("Secondary")
-

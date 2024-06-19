@@ -4,7 +4,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from yarl import URL
 
-from modules.apartments.constants import ApartmentStatus, FloorChoice, MarketChoice, FinishingConditionChoice
+from modules.apartments.constants import (
+    ApartmentStatus,
+    FinishingConditionChoice,
+    FloorChoice,
+    MarketChoice,
+)
 from modules.core.models import BaseModel
 
 
@@ -45,7 +50,11 @@ class Apartment(BaseModel):
         models.DateTimeField(auto_now_add=True, blank=True, null=True),
     )
     estimated_price = models.DecimalField(
-        verbose_name=_("Estimated Price"), max_digits=10, decimal_places=0, blank=True, null=True
+        verbose_name=_("Estimated Price"),
+        max_digits=10,
+        decimal_places=0,
+        blank=True,
+        null=True,
     )
 
     class Meta:
@@ -110,8 +119,11 @@ class ApartmentDetails(BaseModel):
         verbose_name=_("Form Of The Property"), max_length=64, blank=True, null=True
     )
     finishing_condition = models.CharField(
-        verbose_name=_("Finishing Condition"), max_length=64, choices=FinishingConditionChoice.choices, blank=True,
-        null=True
+        verbose_name=_("Finishing Condition"),
+        max_length=64,
+        choices=FinishingConditionChoice.choices,
+        blank=True,
+        null=True,
     )
     balcony_garden_terrace = models.CharField(
         verbose_name=_("Balcony Garden"), max_length=64, blank=True, null=True
@@ -126,7 +138,11 @@ class ApartmentDetails(BaseModel):
         verbose_name=_("Full Description"), blank=True, null=True
     )
     market = models.CharField(
-        verbose_name=_("Market"), max_length=64, choices=MarketChoice.choices, blank=True, null=True
+        verbose_name=_("Market"),
+        max_length=64,
+        choices=MarketChoice.choices,
+        blank=True,
+        null=True,
     )
     advertisement_type = models.CharField(
         verbose_name=_("Advertisement Type"), max_length=128, blank=True, null=True

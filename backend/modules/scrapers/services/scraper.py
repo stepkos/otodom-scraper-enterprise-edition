@@ -1,6 +1,5 @@
-from celery import chain
-
 import requests
+from celery import chain
 from lxml import html
 from yarl import URL
 
@@ -13,7 +12,12 @@ from modules.scrapers.services.scraper_listview import (
     scrap_single_list_page,
 )
 from modules.scrapers.services.scraper_subview import scrape_apartment_details
-from modules.scrapers.tasks import fetch_apartment_details_task, fetch_apartments_task, handle_tasks_done, valuate_task
+from modules.scrapers.tasks import (
+    fetch_apartment_details_task,
+    fetch_apartments_task,
+    handle_tasks_done,
+    valuate_task,
+)
 from modules.scrapers.utils import get_next_page_url, get_page
 
 
@@ -49,10 +53,11 @@ class ScraperService:
                 apartment = self._save_or_update(apart_data, "subpage", Apartment)
                 session.apartments.add(apartment)
                 session.save()
-                subtasks.append(chain(
-                    self._get_signature_details_task(apartment),
-                    self._get_valuate_task(apartment),
-                )
+                subtasks.append(
+                    chain(
+                        self._get_signature_details_task(apartment),
+                        self._get_valuate_task(apartment),
+                    )
                 )
             subtasks.append(self._get_signature_next_page_task(session_id, url, mails))
             return subtasks
@@ -61,7 +66,7 @@ class ScraperService:
             return [handle_tasks_done.s(session_id, mails)]
 
     def _save_or_update(
-            self, dict_data: dict, unique_key_name: str, ModelClass
+        self, dict_data: dict, unique_key_name: str, ModelClass
     ) -> Apartment | None:
         try:
             apartment, created = ModelClass.objects.update_or_create(
