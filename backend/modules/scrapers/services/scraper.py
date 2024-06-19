@@ -28,7 +28,7 @@ class ScraperService:
     def fetch_apartment_details(self, apartment: Apartment):
         apart_details_data = {}
         try:
-            url = apartment.get_abs_details_url()
+            url = apartment.subpage_abs_path
             apart_details_data = scrape_apartment_details(
                 html.fromstring(get_page(URL(url)))
             )

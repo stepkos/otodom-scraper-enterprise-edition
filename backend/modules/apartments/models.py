@@ -8,7 +8,7 @@ from modules.apartments.constants import (
     ApartmentStatus,
     FinishingConditionChoice,
     FloorChoice,
-    MarketChoice,
+    MarketChoice, OTODOM_BASE_URL,
 )
 from modules.core.models import BaseModel
 
@@ -37,7 +37,7 @@ class Apartment(BaseModel):
         choices=FloorChoice.choices,
         blank=True,
         null=True,
-    )  # floor dodałem rowniez w details poniewaz tutaj jest tylko do 10+
+    )  # floor is also in details, because here is string from the list
     status = models.CharField(
         verbose_name=_("Status"),
         max_length=20,
@@ -62,6 +62,10 @@ class Apartment(BaseModel):
         verbose_name_plural = _("Apartments")
 
     @property
+    def subpage_abs_path(self) -> URL:
+        return URL(OTODOM_BASE_URL) / str(self.subpage)
+
+    @property
     def address_estate(self) -> str | None:
         with suppress(IndexError):
             return str(self.address).replace(" ", "").split(",")[-3]
@@ -84,15 +88,8 @@ class Apartment(BaseModel):
             return self.below_market_price > treshold
         return False
 
-    # @property
-    # def predicted_price(self) -> float | None:
-    #     return predict_with_scalers_from_apartment(self)
-
     def __str__(self):
         return f"Apartment(title={self.title[:20]}, price={self.price})"
-
-    def get_abs_details_url(self):
-        return URL("https://www.otodom.pl" + self.subpage)
 
 
 class ApartmentDetails(BaseModel):

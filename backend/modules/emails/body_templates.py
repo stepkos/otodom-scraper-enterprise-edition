@@ -12,7 +12,7 @@ def get_single_offer_template(apart: Apartment):
             <td>Rooms: {apart.rooms}</td>
             <td>Area: {apart.area} m²</td>
             <td>Floor: {apart.floor}</td>
-            <td><a href="{apart.get_abs_details_url()}">Link</a></td>
+            <td><a href="{apart.subpage_abs_path}">Link</a></td>
         </tr>
     """
 

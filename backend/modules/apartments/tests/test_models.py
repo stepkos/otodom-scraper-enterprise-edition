@@ -57,7 +57,7 @@ class ApartmentModelTests(TestCase):
 
     def test_get_abs_details_url(self):
         self.assertEqual(
-            self.apartment.get_abs_details_url(),
+            self.apartment.subpage_abs_path,
             URL("https://www.otodom.pl/test-apartment"),
         )
 

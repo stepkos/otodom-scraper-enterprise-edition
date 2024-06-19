@@ -2,6 +2,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+OTODOM_BASE_URL = "https://www.otodom.pl"
+
+
 class ApartmentStatus(models.TextChoices):
     WAITING_FOR_DETAILS = "WAITING_FOR_DETAILS", _("Awaiting details")
     SYNCHRONIZED = "SYNCHRONIZED", _("Synchronized")
