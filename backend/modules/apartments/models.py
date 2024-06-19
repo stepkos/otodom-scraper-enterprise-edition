@@ -61,6 +61,10 @@ class Apartment(BaseModel):
             return float(self.price) / float(self.area)
         return None
 
+    # @property
+    # def predicted_price(self) -> float | None:
+    #     return predict_with_scalers_from_apartment(self)
+
     def __str__(self):
         return f"Apartment(title={self.title[:20]}, price={self.price})"
 
