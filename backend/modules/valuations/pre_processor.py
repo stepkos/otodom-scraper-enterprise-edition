@@ -1,3 +1,5 @@
+import random
+
 from modules.apartments.models import Apartment, ApartmentDetails
 
 
@@ -137,6 +139,22 @@ def processing_apartment(apartment: Apartment) -> dict | None:
     apartment_dict = fetch_predict_attrs(apartment)
     if not apartment_dict:
         return None
+
+    # uzupelniamy null srednia tam gdzie mozemy
+    # apartment_dict["is_elevator"] = apartment_dict["is_elevator"] or 0.5780
+    # apartment_dict["market"] = apartment_dict["market"] or 0.5860
+
+    apartment_dict["is_elevator"] = (
+        apartment_dict["is_elevator"] or random.choice([False, True])
+    )
+    apartment_dict["market"] = (
+            apartment_dict["market"] or random.choice(["pierwotny", "wtórny"])
+    )
+    apartment_dict["finishing_condition"] = (
+        apartment_dict["finishing_condition"] or random.choice(
+            ["do wykończenia", "do zamieszkania", "do remontu"]
+        )
+    )
 
     if not all([
         check_is_not_none(apartment_dict),
