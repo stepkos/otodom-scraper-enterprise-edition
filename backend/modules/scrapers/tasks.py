@@ -1,11 +1,9 @@
-from celery import chain, group, chord
+from celery import chord, group
 
 from modules.apartments.models import Apartment
 from modules.core.utils import celery_task
 from modules.emails.tasks import test_mail
-from modules.scrapers.services.custom_logger import CustomLogger, celery_logger
-
-DEFAULT_CELERY_DELAY_SECONDS = 10
+from modules.scrapers.services.custom_logger import CustomLogger
 
 
 @celery_task

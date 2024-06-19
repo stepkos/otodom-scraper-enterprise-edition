@@ -101,13 +101,16 @@ ProcessorDict = dict[str, ValueProcessor]
 
 
 def parse_single_attr(
-        xpaths_dict: dict[str, str],
-        parse_dict: ProcessorDict,
-        elem: HtmlElement,
-        attr_name: str,
+    xpaths_dict: dict[str, str],
+    parse_dict: ProcessorDict,
+    elem: HtmlElement,
+    attr_name: str,
 ):
     if text := elem.xpath(xpaths_dict[attr_name]):
         val = parse_dict[attr_name].process_value(text[0])
-        if "brak informacji" not in str(val).lower() and "zapytaj" not in str(val).lower():
+        if (
+            "brak informacji" not in str(val).lower()
+            and "zapytaj" not in str(val).lower()
+        ):
             return val
     return None

@@ -1,16 +1,24 @@
 def _subview_datatable_xpath(keyword: str) -> str:
-    return '//h4[text()="Mieszkanie na sprzedaż"]/following-sibling::div[2]/div/p[contains(., "' + keyword + '")]/following-sibling::p'
+    return (
+        '//h4[text()="Mieszkanie na sprzedaż"]/following-sibling::div[2]/div/p[contains(., "'
+        + keyword
+        + '")]/following-sibling::p'
+    )
 
 
 def _subview_extra_table_xpath(keyword: str) -> str:
-    return '//h4[text()="Mieszkanie na sprzedaż"]/following-sibling::div[3]/div[1]//p[contains(., "' + keyword + '")]/following-sibling::p'
+    return (
+        '//h4[text()="Mieszkanie na sprzedaż"]/following-sibling::div[3]/div[1]//p[contains(., "'
+        + keyword
+        + '")]/following-sibling::p'
+    )
 
 
 HTTP_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                  "AppleWebKit/537.36 (KHTML, like Gecko) "
-                  "Chrome/58.0.3029.110 "
-                  "Safari/537.3"
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/58.0.3029.110 "
+    "Safari/537.3"
 }
 
 LISTVIEW_XPATHS = {
@@ -31,8 +39,12 @@ SUBVIEW_XPATHS = {
     "energy_certificate": _subview_datatable_xpath("Certyfikat energetyczny"),
     "form_of_the_property": _subview_datatable_xpath("Forma własności"),
     "finishing_condition": _subview_datatable_xpath("Stan wykończenia"),
-    "balcony_garden_terrace": _subview_datatable_xpath("Balkon / ogród / taras"),  # THIS NO LONGER EXISTS
-    "parking_place": _subview_datatable_xpath("Miejsce parkingowe"),  # THIS NO LONGER EXISTS
+    "balcony_garden_terrace": _subview_datatable_xpath(
+        "Balkon / ogród / taras"
+    ),  # THIS NO LONGER EXISTS
+    "parking_place": _subview_datatable_xpath(
+        "Miejsce parkingowe"
+    ),  # THIS NO LONGER EXISTS
     "heating": _subview_datatable_xpath("Ogrzewanie"),  # THIS NO LONGER EXISTS
     "description": '//div[@data-cy="adPageAdDescription"]',
     "market": _subview_extra_table_xpath("Rynek"),

@@ -54,22 +54,24 @@ class ScraperService:
     def _save_or_update(
         self, dict_data: dict, unique_key_name: str, ModelClass
     ) -> Apartment | None:
-        # try:
-        apartment, created = ModelClass.objects.update_or_create(
-            # TODO: check if this works as it should, cause I've struggled a bit
-            **{unique_key_name: dict_data[unique_key_name]},
-            defaults={
-                key: value for key, value in dict_data.items() if key != unique_key_name
-            },
-        )
-        if not created:
-            self.logger.log_info(f"Updated: {dict_data}")
-        else:
-            self.logger.log_info(f"Created: {dict_data}")
-        return apartment
+        try:
+            apartment, created = ModelClass.objects.update_or_create(
+                # TODO: check if this works as it should, cause I've struggled a bit
+                **{unique_key_name: dict_data[unique_key_name]},
+                defaults={
+                    key: value
+                    for key, value in dict_data.items()
+                    if key != unique_key_name
+                },
+            )
+            if not created:
+                self.logger.log_info(f"Updated: {dict_data}")
+            else:
+                self.logger.log_info(f"Created: {dict_data}")
+            return apartment
 
-    # except Exception as e:
-    #     self.logger.log_error(f"Error processing {dict_data}: {e}")
+        except Exception as e:
+            self.logger.log_error(f"Error processing {dict_data}: {e}")
 
     @staticmethod
     def _get_signature_next_page_task(curr_url: URL):

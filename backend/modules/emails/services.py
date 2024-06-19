@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from config import settings
 from modules.apartments.models import Apartment
 from modules.emails.body_templates import get_message_template
-from modules.emails.utils import create_html_message, create_message, send_email
+from modules.emails.utils import create_html_message, send_email
 
 
 class EmailService:
