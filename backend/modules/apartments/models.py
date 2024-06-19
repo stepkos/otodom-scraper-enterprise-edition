@@ -44,9 +44,6 @@ class Apartment(BaseModel):
         models.DateTimeField(auto_now_add=True, blank=True, null=True),
     )
 
-    # tmp
-    was_deleted = models.BooleanField(verbose_name=_("Was Deleted"), default=False)
-
     class Meta:
         verbose_name = _("Apartment")
         verbose_name_plural = _("Apartments")
@@ -69,7 +66,7 @@ class ApartmentDetails(BaseModel):
         Apartment,
         verbose_name=_("Apartment"),
         related_name="details",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         blank=True,
         null=True,
     )

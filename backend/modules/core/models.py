@@ -23,6 +23,3 @@ class CeleryResult(BaseModel):
     result = models.JSONField(null=True, blank=True)
     errors = models.JSONField(null=True, blank=True)
     logs = models.JSONField(null=True, blank=True)
-
-
-

@@ -27,6 +27,7 @@ def scrape_apartment_details(page: html.HtmlElement) -> dict:
         "description": parse("description"),
     }
 
+
 # def scrape_apartments_details(urls: Iterator[URL]) -> Iterator[ApartmentDetails]:
 #     for url in urls:
 #         page = get_page(url)

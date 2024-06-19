@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     "modules.core",
     "modules.emails",
     "modules.scrapers",
-    "modules.valuations",
+    # "modules.valuations",
 ]
 
 MIDDLEWARE = [
@@ -69,6 +69,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 
 ROOT_URLCONF = "config.urls"
 
@@ -168,3 +170,4 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # Email settings
 EMAIL_USER = os.environ.get("EMAIL_USER")
 EMAIL_APP_CLIENT_ACCESS_CODE = os.environ.get("EMAIL_APP_CLIENT_ACCESS_CODE")
+EMAIL_CTA_URL = "http://127.0.0.1/admin/apartments/apartment/"
