@@ -1,6 +1,3 @@
-from decimal import Decimal
-from random import random
-
 from celery import group
 
 from modules.apartments.models import Apartment
@@ -8,6 +5,7 @@ from modules.core.utils import celery_task
 from modules.emails.tasks import send_offers
 from modules.scrapers.models import ScraperSession
 from modules.scrapers.services.custom_logger import CustomLogger
+from modules.valuations.ml.predictions import predict_with_scalers_from_apartment
 
 
 @celery_task
@@ -22,9 +20,7 @@ def fetch_apartment_details_task(logger: CustomLogger, _, apartment_id):
 def valuate_task(__, _, ___, apartment_id):
     apartment = Apartment.objects.get(id=apartment_id)
     if apartment.price:
-        apartment.estimated_price = apartment.price + apartment.price * Decimal(
-            str(random())
-        )
+        apartment.estimated_price = predict_with_scalers_from_apartment(apartment)
         apartment.save()
 
 

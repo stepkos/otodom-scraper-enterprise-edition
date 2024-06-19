@@ -15,6 +15,7 @@ RUN pip install --upgrade pip
 RUN pip install gunicorn
 ADD ./backend/requirements.txt /app/
 RUN pip install -r /app/requirements.txt
+RUN pip install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cpu
 
 ADD ./backend /app/backend
 ADD ./docker /app/docker

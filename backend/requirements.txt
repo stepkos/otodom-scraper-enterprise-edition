@@ -46,12 +46,11 @@ requests==2.32.2
 six==1.16.0
 sqlparse==0.5.0
 sympy==1.12
-torch==2.2.2+cpu
-torchaudio==2.2.2+cpu
-torchvision==0.17.2+cpu
 typing_extensions==4.9.0
 tzdata==2024.1
 urllib3==2.2.1
 vine==5.1.0
 wcwidth==0.2.13
 yarl==1.9.4
+joblib==1.4.2
+scikit-learn==1.5.0

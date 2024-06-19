@@ -12,3 +12,6 @@ pip-install:
 
 pip-freeze:
 	docker-compose exec server pip3 freeze > backend/requirements.txt
+
+bash:
+	docker-compose exec server bash

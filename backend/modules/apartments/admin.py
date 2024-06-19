@@ -10,10 +10,6 @@ class ApartmentAdmin(admin.ModelAdmin):
     search_fields = "title", "address"
     ordering = ("price",)
     readonly_fields = "subpage", "created_at", "updated_at"
-    # fields = ...
 
 
 admin.site.register(ApartmentDetails)
-# @admin.register(ApartmentDetails)
-# class ApartmentDetailsAdmin(admin):
-#     list_display =
