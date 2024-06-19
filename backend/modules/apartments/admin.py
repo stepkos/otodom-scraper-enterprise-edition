@@ -7,7 +7,7 @@ from modules.apartments.models import Apartment, ApartmentDetails
 class ApartmentAdmin(admin.ModelAdmin):
     list_display = "title", "address", "price"
     list_filter = "rooms", "floor"
-    search_fields = "title", "address"
+    search_fields = "title", "address", "id"
     ordering = ("price",)
     readonly_fields = "subpage", "created_at", "updated_at"
 

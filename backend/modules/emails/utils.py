@@ -23,7 +23,7 @@ def create_html_message(
     message["From"] = from_
     message["To"] = to
     message["Subject"] = subject
-    message.attach(MIMEText("HELLO HELLO", "plain"))
+    message.attach(MIMEText("", "plain"))
     message.attach(MIMEText(html_str, "html"))
     return message
 

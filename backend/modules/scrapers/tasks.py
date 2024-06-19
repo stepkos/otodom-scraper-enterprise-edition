@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from celery import group
 
 from modules.apartments.models import Apartment
@@ -19,14 +21,14 @@ def fetch_apartment_details_task(logger: CustomLogger, _, apartment_id):
 @celery_task
 def valuate_task(__, _, ___, apartment_id):
     apartment = Apartment.objects.get(id=apartment_id)
-    if apartment.price:
-        apartment.estimated_price = predict_with_scalers_from_apartment(apartment)
+    if apartment.price and (est_price := predict_with_scalers_from_apartment(apartment)):
+        apartment.estimated_price = Decimal(str(est_price))
         apartment.save()
 
 
 @celery_task
 def fetch_apartments_task(
-    logger: CustomLogger, _, session_id, url: str, mails: list[str]
+        logger: CustomLogger, _, session_id, url: str, mails: list[str]
 ):
     from modules.scrapers.services.scraper import ScraperService
 
@@ -42,18 +44,21 @@ def scraper_master_task(__, _, url: str, mails: list[str], treshold: float):
 
 @celery_task
 def handle_tasks_done(logger: CustomLogger, _, session_id, mails: list[str]):
-    logger.log_info("All tasks are done!")
     session = ScraperSession.objects.get(id=session_id)
+    logger.log_info(f"All tasks are done! Looking for special offers, treshold {session.treshold}")
 
     special_offers_ids = []
     for apart in session.apartments.all():
-        logger.log_info(str(apart.is_special_offer(session.treshold)))
-        logger.log_info(str(apart.below_market_price))
-        logger.log_info(str(apart.price))
-        logger.log_info(str(apart.estimated_price))
-
         if apart.is_special_offer(session.treshold):
+            logger.log_info("Special offer, below price:" + str(apart.below_market_price))
             special_offers_ids.append(apart.id)
+        elif apart.estimated_price is None:
+            logger.log_error(f"No est price for: {apart.id}")
+        else:
+            logger.log_info(f"This is not so special: {apart.price}, market: {apart.estimated_price}")
+
+    logger.log_info(f"Found {len(special_offers_ids)} special offers")
 
     for mail in mails:
         send_offers.delay(mail, special_offers_ids)
+        logger.log_info(f"Sent to {mail}")
