@@ -63,7 +63,7 @@ class Apartment(BaseModel):
 
     @property
     def subpage_abs_path(self) -> URL:
-        return URL(OTODOM_BASE_URL) / str(self.subpage)
+        return URL(OTODOM_BASE_URL + self.subpage)
 
     @property
     def address_estate(self) -> str | None:
