@@ -30,14 +30,16 @@ def valuate_task(logger, _, ___, apartment_id):
             apartment.status = ApartmentStatus.VALUATED
             apartment.save()
         else:
-            logger.log_error(f"Could not estimate for this apartment: {apartment_id}, details: {apartment.details.id}")
+            logger.log_error(
+                f"Could not estimate for this apartment: {apartment_id}, details: {apartment.details.id}"
+            )
     except ApartmentDetails.DoesNotExist:
         logger.log_error(f"No deatail for: {apartment_id}, status: {apartment.status}")
 
 
 @celery_task
 def fetch_apartments_task(
-        logger: CustomLogger, _, session_id, url: str, mails: list[str]
+    logger: CustomLogger, _, session_id, url: str, mails: list[str]
 ):
     from modules.scrapers.services.scraper import ScraperService
 
@@ -46,25 +48,40 @@ def fetch_apartments_task(
 
 
 @celery_task
-def scraper_master_task(__, _, url: str, mails: list[str], treshold: float, artificial_page_stop: int | None = None):
-    session = ScraperSession.objects.create(url=url, treshold=treshold, artificial_page_stop=artificial_page_stop)
+def scraper_master_task(
+    __,
+    _,
+    url: str,
+    mails: list[str],
+    treshold: float,
+    artificial_page_stop: int | None = None,
+):
+    session = ScraperSession.objects.create(
+        url=url, treshold=treshold, artificial_page_stop=artificial_page_stop
+    )
     fetch_apartments_task.s(session.id, url, mails).delay()
 
 
 @celery_task
 def handle_tasks_done(logger: CustomLogger, _, session_id, mails: list[str]):
     session = ScraperSession.objects.get(id=session_id)
-    logger.log_info(f"All tasks are done! Looking for special offers, treshold {session.treshold}")
+    logger.log_info(
+        f"All tasks are done! Looking for special offers, treshold {session.treshold}"
+    )
 
     special_offers_ids = []
     for apart in session.apartments.all():
         if apart.is_special_offer(session.treshold):
-            logger.log_info("Special offer, below price:" + str(apart.below_market_price))
+            logger.log_info(
+                "Special offer, below price:" + str(apart.below_market_price)
+            )
             special_offers_ids.append(apart.id)
         elif apart.estimated_price is None:
             logger.log_error(f"No est price for: {apart.id}")
         else:
-            logger.log_info(f"This is not so special: {apart.price}, market: {apart.estimated_price}")
+            logger.log_info(
+                f"This is not so special: {apart.price}, market: {apart.estimated_price}"
+            )
 
     logger.log_info(f"Found {len(special_offers_ids)} special offers")
 

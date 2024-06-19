@@ -101,10 +101,10 @@ ProcessorDict = dict[str, ValueProcessor]
 
 
 def parse_single_attr(
-        xpaths_dict: dict[str, str],
-        parse_dict: ProcessorDict,
-        elem: HtmlElement,
-        attr_name: str,
+    xpaths_dict: dict[str, str],
+    parse_dict: ProcessorDict,
+    elem: HtmlElement,
+    attr_name: str,
 ):
     if text := elem.xpath(xpaths_dict[attr_name]):
         try:

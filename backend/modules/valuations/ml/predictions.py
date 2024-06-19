@@ -22,12 +22,25 @@ def predict_with_scalers(input_data: list[float]) -> float:
 
 
 attributes = [
-    'rooms', 'area', 'floor', 'max_floor', 'market', 'year_of_construction',
-    'is_elevator', 'finishing_condition_0',
-    'finishing_condition_1', 'finishing_condition_2', 'address_estate_0',
-    'address_estate_1', 'address_estate_2', 'address_estate_3',
-    'address_estate_4', 'address_estate_5', 'address_estate_6',
-    'address_estate_7', 'address_estate_8'
+    "rooms",
+    "area",
+    "floor",
+    "max_floor",
+    "market",
+    "year_of_construction",
+    "is_elevator",
+    "finishing_condition_0",
+    "finishing_condition_1",
+    "finishing_condition_2",
+    "address_estate_0",
+    "address_estate_1",
+    "address_estate_2",
+    "address_estate_3",
+    "address_estate_4",
+    "address_estate_5",
+    "address_estate_6",
+    "address_estate_7",
+    "address_estate_8",
 ]
 
 

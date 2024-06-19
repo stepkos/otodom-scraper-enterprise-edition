@@ -1,11 +1,16 @@
-from django.test import TestCase
-from django.utils import timezone
 from decimal import Decimal
 
+from django.test import TestCase
+from django.utils import timezone
 from yarl import URL
 
+from modules.apartments.constants import (
+    ApartmentStatus,
+    FinishingConditionChoice,
+    FloorChoice,
+    MarketChoice,
+)
 from modules.apartments.models import Apartment, ApartmentDetails
-from modules.apartments.constants import ApartmentStatus, FinishingConditionChoice, FloorChoice, MarketChoice
 
 
 class ApartmentModelTests(TestCase):
@@ -20,7 +25,7 @@ class ApartmentModelTests(TestCase):
             area=Decimal("100.00"),
             floor=FloorChoice.GROUND_FLOOR,
             status=ApartmentStatus.VALUATED,
-            estimated_price=Decimal("550000")
+            estimated_price=Decimal("550000"),
         )
 
     def test_apartment_creation(self):
@@ -36,7 +41,9 @@ class ApartmentModelTests(TestCase):
         self.assertEqual(self.apartment.price_per_m2, 5000.00)
 
     def test_below_market_price(self):
-        self.assertEqual((float(self.apartment.estimated_price) - float(self.apartment.price)), 50000)
+        self.assertEqual(
+            (float(self.apartment.estimated_price) - float(self.apartment.price)), 50000
+        )
         self.assertEqual(self.apartment.below_market_price, 50000)
 
     def test_is_special_offer(self):
@@ -44,18 +51,22 @@ class ApartmentModelTests(TestCase):
         self.assertFalse(self.apartment.is_special_offer(60000))
 
     def test_str(self):
-        self.assertEqual(str(self.apartment), "Apartment(title=Test Apartment, price=500000)")
+        self.assertEqual(
+            str(self.apartment), "Apartment(title=Test Apartment, price=500000)"
+        )
 
     def test_get_abs_details_url(self):
-        self.assertEqual(self.apartment.get_abs_details_url(), URL("https://www.otodom.pl/test-apartment"))
+        self.assertEqual(
+            self.apartment.get_abs_details_url(),
+            URL("https://www.otodom.pl/test-apartment"),
+        )
 
 
 class ApartmentDetailsModelTests(TestCase):
 
     def setUp(self):
         self.apartment = Apartment.objects.create(
-            title="Test Apartment",
-            subpage="/test-apartment"
+            title="Test Apartment", subpage="/test-apartment"
         )
         self.details = ApartmentDetails.objects.create(
             apartment=self.apartment,
@@ -75,13 +86,17 @@ class ApartmentDetailsModelTests(TestCase):
             year_of_construction=2020,
             type_of_development="Residential",
             windows="Double-glazed",
-            is_elevator=True
+            is_elevator=True,
         )
 
     def test_apartment_details_creation(self):
         self.assertEqual(self.details.apartment, self.apartment)
         self.assertEqual(self.details.exact_floor, 2)
-        self.assertEqual(self.details.finishing_condition, FinishingConditionChoice.TO_RENOVATE)
+        self.assertEqual(
+            self.details.finishing_condition, FinishingConditionChoice.TO_RENOVATE
+        )
 
     def test_str(self):
-        self.assertEqual(str(self.details), "Apartment(title=Test Apartment, price=None) - details")
+        self.assertEqual(
+            str(self.details), "Apartment(title=Test Apartment, price=None) - details"
+        )
