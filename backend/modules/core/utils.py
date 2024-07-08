@@ -3,7 +3,6 @@ import json
 from functools import wraps
 
 from celery import chain
-from celery.result import GroupResult
 
 from config import celery_app
 from modules.core.models import CeleryResult
