@@ -17,6 +17,15 @@ here: [stepkos/real-estate-price-valuation](https://github.com/stepkos/real-esta
 
 ## From the user's side
 
+To start tracking the offers, the user can setup configuration via the admin panel. 
+
+The user can specify:
+- Frequency of the search
+- Link to otodom website with applied filters
+- Email address/es to which the results will be sent
+- Attractive price threshold (how much below market price is the apartment attractive)
+- Limit of pages while scraping
+
 As a result user receives email with attractive apartments from the last search.
 
 <p>
@@ -29,7 +38,6 @@ As a result user receives email with attractive apartments from the last search.
 - **Szymon Kowaliński [(github: simon-the-shark)](https://github.com/simon-the-shark)**
 
 ## License
+This software was created for educational purposes only. Authors do not take any responsibility for any consequences resulting from the use or execution of this software.
 
-...
 Django template based on [template from saasitive](https://github.com/saasitive/docker-compose-django-celery-redis-postgres/)
-
