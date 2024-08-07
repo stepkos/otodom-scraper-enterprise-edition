@@ -83,9 +83,9 @@ class Apartment(BaseModel):
             return float(self.estimated_price) - float(self.price)
         return None
 
-    def is_special_offer(self, treshold: float) -> bool:
-        if self.below_market_price and treshold:
-            return self.below_market_price > treshold
+    def is_special_offer(self, threshold: float) -> bool:
+        if self.below_market_price and threshold:
+            return self.below_market_price > threshold
         return False
 
     def __str__(self):

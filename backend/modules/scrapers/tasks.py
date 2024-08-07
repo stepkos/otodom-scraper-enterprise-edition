@@ -53,11 +53,11 @@ def scraper_master_task(
     _,
     url: str,
     mails: list[str],
-    treshold: float,
+    threshold: float,
     artificial_page_stop: int | None = None,
 ):
     session = ScraperSession.objects.create(
-        url=url, treshold=treshold, artificial_page_stop=artificial_page_stop
+        url=url, threshold=threshold, artificial_page_stop=artificial_page_stop
     )
     fetch_apartments_task.s(session.id, url, mails).delay()
 
@@ -66,12 +66,12 @@ def scraper_master_task(
 def handle_tasks_done(logger: CustomLogger, _, session_id, mails: list[str]):
     session = ScraperSession.objects.get(id=session_id)
     logger.log_info(
-        f"All tasks are done! Looking for special offers, treshold {session.treshold}"
+        f"All tasks are done! Looking for special offers, threshold {session.threshold}"
     )
 
     special_offers_ids = []
     for apart in session.apartments.all():
-        if apart.is_special_offer(session.treshold):
+        if apart.is_special_offer(session.threshold):
             logger.log_info(
                 "Special offer, below price:" + str(apart.below_market_price)
             )
