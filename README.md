@@ -4,7 +4,8 @@ The project focuses on scraping, storing and evaluating apartments from the adve
 
 The repository was named "Enterprise Edition" because the software has been expanded to enable cyclical searches of the website with advertisements, apartment valuations and sending email notifications with the most attractive ones.
 
-Real estate valuation model is trained on the data from scraper. Whole analysis and training process is available here: [stepkos/real-estate-price-valuation](https://github.com/stepkos/real-estate-price-valuation)
+Real estate valuation model is trained on the data from scraper. Whole analysis and training process is available <br/>
+here: [stepkos/real-estate-price-valuation](https://github.com/stepkos/real-estate-price-valuation)
 
 ## Tech Stack
 
@@ -19,7 +20,7 @@ Real estate valuation model is trained on the data from scraper. Whole analysis 
 As a result user receives email with attractive apartments from the last search.
 
 <p>
-  <img src="https://github.com/stepkos/otodom-scraper-enterprise-edition/blob/main/docs/screens/result_email.jpg" alt="Result email screen" height="500">
+  <img src="https://github.com/stepkos/otodom-scraper-enterprise-edition/blob/main/docs/screens/result_email.jpg" alt="Result email screen" width="530">
 </p>
 
 ## Authors
