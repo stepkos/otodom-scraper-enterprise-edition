@@ -18,7 +18,9 @@ Real estate valuation model is trained on the data from scraper. Whole analysis 
 
 As a result user receives email with attractive apartments from the last search.
 
-![Result email screen](https://github.com/stepkos/otodom-scraper-enterprise-edition/blob/main/docs/screens/result_email.jpg)
+<p>
+  <img src="https://github.com/stepkos/otodom-scraper-enterprise-edition/blob/main/docs/screens/result_email.jpg" alt="Result email screen" height="500">
+</p>
 
 ## Authors
 
